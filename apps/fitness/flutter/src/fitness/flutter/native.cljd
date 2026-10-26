@@ -1,0 +1,198 @@
+(ns fitness.flutter.native
+  "Flutter renderers for the fitness native views (docs/NATIVE_CONTRACTS.md): each is a
+  CustomPaint built from :props only. cloview's :ui/native adapter memoizes the widget
+  on :props, so the painters run again only when the props change.
+
+  Input: a tap (onTapUp — a drag never selects) resolves the muscle with the shared
+  fitness.body/pick and dispatches the event vector of the props under
+  [:events :body/select-muscle], once.
+
+  Status: compiles with ClojureDart 0.9.20261002 on Flutter 3.47.8 (Windows harness run
+  of 2026-10-25, step 07 of the pre-split harness); `bb fitness:flutter` / harness
+  step 04 compile and widget-test it on a machine with Flutter >= 3.35."
+  (:require ["dart:math" :as math]
+            ["package:flutter/gestures.dart" :as g]
+            ["package:flutter/material.dart" :as m]
+            [cloview.core.color :as color]
+            [fitness.body :as body]))
+
+;; typed return: (.withAlpha (c ...) a) below resolves statically (the 2-2 Windows compile
+;; reported it as a dynamic call)
+(defn- ^m/Color c [hex] (m/Color (color/argb-int hex)))
+
+(defn- fill-paint [hex]
+  (doto (m/Paint) (.-color! (c hex)) (.-style! m/PaintingStyle.fill)))
+
+(defn- stroke-paint [hex width]
+  (doto (m/Paint) (.-color! (c hex)) (.-style! m/PaintingStyle.stroke) (.-strokeWidth! (double width))))
+
+(defn- offset [[x y]] (m/Offset (double x) (double y)))
+
+(defn- draw-text! [^m/Canvas canvas text x y size hex]
+  (let [tp (m/TextPainter .text (m/TextSpan .text (str text)
+                                            .style (m/TextStyle .fontSize (double size) .color (c hex)))
+                          .textDirection m/TextDirection.ltr)]
+    (.layout tp)
+    (.paint tp canvas (m/Offset (- (double x) (/ (.-width tp) 2.0)) (- (double y) (/ (.-height tp) 2.0))))
+    (.dispose tp)))
+
+(defn- sized [size child]
+  (m/SizedBox .width (double (:width size 300)) .height (double (:height size 200)) .child child))
+
+;; ---------------------------------------------------------------------------
+;; Body map (2D)
+
+(defn- silhouette-path [lay figure commands]
+  (let [path (m/Path)
+        pt (fn [x y] (body/to-canvas lay figure [x y]))
+        s (:scale lay)]
+    (doseq [[op & args] commands]
+      (case op
+        :M (let [[x y] (apply pt args)] (.moveTo path (double x) (double y)))
+        :L (let [[x y] (apply pt args)] (.lineTo path (double x) (double y)))
+        :Q (let [[cx cy] (pt (nth args 0) (nth args 1)) [x y] (pt (nth args 2) (nth args 3))]
+             (.quadraticBezierTo path (double cx) (double cy) (double x) (double y)))
+        :C (let [[ax ay] (pt (nth args 0) (nth args 1)) [bx by] (pt (nth args 2) (nth args 3))
+                 [x y] (pt (nth args 4) (nth args 5))]
+             (.cubicTo path (double ax) (double ay) (double bx) (double by) (double x) (double y)))
+        :Z (.close path)
+        :oval (let [[x y w h] args [px py] (pt x y)]
+                (.addOval path (m/Rect.fromLTWH (double px) (double py) (double (* w s)) (double (* h s)))))
+        :rrect (let [[x y w h r] args [px py] (pt x y)]
+                 (.addRRect path (m/RRect.fromRectAndRadius
+                                  (m/Rect.fromLTWH (double px) (double py) (double (* w s)) (double (* h s)))
+                                  (m/Radius.circular (double (* r s))))))
+        nil))
+    path))
+
+(defn- polygon-path [lay figure points]
+  (let [path (m/Path)
+        [p0 & more] (map #(body/to-canvas lay figure %) points)]
+    (.moveTo path (double (first p0)) (double (second p0)))
+    (doseq [[x y] more] (.lineTo path (double x) (double y)))
+    (.close path)
+    path))
+
+(defn- body-painter [props]
+  (reify :extends m/CustomPainter
+    (paint [_ canvas size]
+      (let [w (.-width size) h (.-height size)
+            lay (body/layout w h)
+            s (:scale lay)
+            levels (into {} (map (juxt :id :level)) (:regions props))
+            selected (:selected props)
+            {:keys [torso arm leg]} body/silhouette
+            shell (fill-paint (:silhouette body/palette))]
+        (doseq [figure [:front :back]
+                part [torso arm (body/mirror-commands arm) leg (body/mirror-commands leg)]]
+          (.drawPath canvas (silhouette-path lay figure part) shell))
+        (doseq [{:keys [id figure points]} body/polygons]
+          (let [path (polygon-path lay figure points)
+                sel? (= id selected)]
+            (.drawPath canvas path (fill-paint (body/level-color (get levels id))))
+            (.drawPath canvas path (stroke-paint (if sel? (:selected body/palette) (:outline body/palette))
+                                                 (* s (if sel? 1.2 0.5))))))
+        (doseq [[figure [x y]] (:captions lay)]
+          (draw-text! canvas (get-in props [:labels figure] (name figure)) x y 12 (:muted body/palette))))
+      nil)
+    (shouldRepaint [_ _] true)))
+
+(defn- body-view [dispatch! props]
+  (m/Semantics
+   .label (str (:a11y-label props))
+   .child (sized (:size props)
+                 (m/Builder
+                  .builder
+                  (fn ^m/Widget [^m/BuildContext ctx]
+                    (m/GestureDetector
+                     .onTapUp (fn [^g/TapUpDetails d]
+                                ;; pick with the size actually laid out: a stretching parent can
+                                ;; make the box wider than :size, and the painter uses the real size
+                                (let [^m/RenderBox box (.findRenderObject ctx)
+                                      sz (.-size box)
+                                      p (.-localPosition d)]
+                                  (when-some [id (body/pick (.-width sz) (.-height sz) [(.-dx p) (.-dy p)])]
+                                    (when-some [ev (get-in props [:events :body/select-muscle])]
+                                      (dispatch! (conj ev id)))))
+                                nil)
+                     .child (m/CustomPaint .painter (body-painter props))))))))
+
+;; ---------------------------------------------------------------------------
+;; Radar
+
+(defn- radar-painter [props]
+  (reify :extends m/CustomPainter
+    (paint [_ canvas size]
+      (let [w (.-width size) h (.-height size)
+            axes (:axes props)
+            n (max 3 (count axes))
+            r (max 4.0 (min (* 0.31 w) (* 0.34 h)))
+            cx (/ w 2.0) cy (/ h 2.0)
+            angle (fn [i] (+ (- (/ math/pi 2.0)) (/ (* 2.0 math/pi i) n)))
+            at (fn [i k] [(+ cx (* k r (math/cos (angle i)))) (+ cy (* k r (math/sin (angle i))))])
+            polygon (fn [k-of] (let [path (m/Path)
+                                     pts (map-indexed (fn [i a] (at i (k-of a))) axes)]
+                                 (when (seq pts)
+                                   (let [[x0 y0] (first pts)] (.moveTo path (double x0) (double y0)))
+                                   (doseq [[x y] (rest pts)] (.lineTo path (double x) (double y)))
+                                   (.close path))
+                                 path))
+            grid (stroke-paint "#D9E1D7" 1)]
+        (doseq [k [0.25 0.5 0.75 1.0]] (.drawPath canvas (polygon (constantly k)) grid))
+        (doseq [i (range (count axes))] (.drawLine canvas (m/Offset cx cy) (offset (at i 1.0)) grid))
+        (.drawPath canvas (polygon :previous-level) (stroke-paint "#BCCDC5" 1.5))
+        (let [current (polygon :current-level)]
+          (.drawPath canvas current (doto (m/Paint) (.-color! (.withAlpha (c "#258675") 38)) (.-style! m/PaintingStyle.fill)))
+          (.drawPath canvas current (stroke-paint "#258675" 2)))
+        (doseq [[i a] (map-indexed vector axes)]
+          (.drawCircle canvas (offset (at i (:current-level a))) 3.0 (fill-paint "#258675"))
+          (let [[x y] (at i 1.34)]
+            (draw-text! canvas (:label a) (max 35.0 (min (- w 35.0) x)) (max 9.0 (min (- h 9.0) y)) 11 "#243B36"))))
+      nil)
+    (shouldRepaint [_ _] true)))
+
+;; ---------------------------------------------------------------------------
+;; Daily calories
+
+(defn- calorie-painter [props]
+  (reify :extends m/CustomPainter
+    (paint [_ canvas size]
+      (let [w (.-width size) h (.-height size)
+            days (:days props)
+            n (max 1 (count days))
+            bottom (- h 30.0) top 21.0 chart-h (- bottom top)
+            cell (/ (- w 28.0) n)
+            bar-w (min 30.0 (* 0.52 cell))
+            scale (double (:scale-max props 1.0))
+            grid (stroke-paint "#D9E1D7" 1)]
+        (doseq [k (range 5)]
+          (let [y (- bottom (* k (/ chart-h 4.0)))]
+            (.drawLine canvas (m/Offset 14.0 y) (m/Offset (- w 14.0) y) grid)))
+        (doseq [[i {:keys [label kcal status value-text date]}] (map-indexed vector days)]
+          (let [x (+ 14.0 (* cell (+ i 0.5)))]
+            (if (= status :unknown)
+              (do (.drawRect canvas (m/Rect.fromLTWH (- x (/ bar-w 2.0)) (- bottom 8.0) bar-w 8.0)
+                             (stroke-paint "#74817A" 1))
+                  (draw-text! canvas "?" x (- bottom 19.0) 10 "#243B36"))
+              (let [bh (* chart-h (/ (double (or kcal 0.0)) scale))]
+                (.drawRRect canvas (m/RRect.fromRectAndRadius
+                                    (m/Rect.fromLTWH (- x (/ bar-w 2.0)) (- bottom bh) bar-w bh)
+                                    (m/Radius.circular 3.0))
+                            (fill-paint (if (= date (:highlight props)) "#E98D4F" "#258675")))
+                (draw-text! canvas value-text x (- bottom bh 11.0) 10 "#243B36")))
+            (draw-text! canvas label x (+ bottom 17.0) 10 "#74817A"))))
+      nil)
+    (shouldRepaint [_ _] true)))
+
+;; ---------------------------------------------------------------------------
+
+(defn renderers
+  "{kind host-map} for fitness.native/register-renderers!."
+  [{:keys [dispatch!]}]
+  {:fitness/body-canvas {:build (fn [_ctx props] (body-view dispatch! props))}
+   :fitness/radar-canvas {:build (fn [_ctx props]
+                                   (m/Semantics .label (str (:a11y-label props))
+                                                .child (sized (:size props) (m/CustomPaint .painter (radar-painter props)))))}
+   :fitness/calorie-canvas {:build (fn [_ctx props]
+                                     (m/Semantics .label (str (:a11y-label props))
+                                                  .child (sized (:size props) (m/CustomPaint .painter (calorie-painter props)))))}})

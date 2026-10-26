@@ -1,0 +1,5 @@
+;; ClojureCLR view of the shared fitness sources (cljr reads deps-clr.edn first).
+{:paths ["src"]
+ :deps {cloview/core {:local/root "../../../../cloview-core/modules/core"}
+        cloview/fx {:local/root "../../../../cloview-core/modules/fx"}}
+ :aliases {:test {:extra-paths ["test"]}}}

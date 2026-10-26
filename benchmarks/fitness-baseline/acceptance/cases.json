@@ -1,0 +1,1576 @@
+{
+  "schema_version": "FITNESS_ACCEPTANCE_CASES_V1",
+  "baseline_version": "0.3.0",
+  "contract_revision": "2026-10-24",
+  "required_hosts": [
+    "jvm",
+    "dart",
+    "clr"
+  ],
+  "profiles": [
+    {
+      "id": "CORE",
+      "required_for_core_parity": true,
+      "description": "Shared UI, domain, state/effects and framework-consumption semantics."
+    },
+    {
+      "id": "FITNESS_NATIVE",
+      "required_for_full_fitness_parity": true,
+      "description": "GIF/MP4, 2D/3D body, charts and the prospective native-child/split-view extension probe."
+    },
+    {
+      "id": "OPTIONAL_INTEGRATIONS",
+      "required_for_core_parity": false,
+      "description": "LAN on applicable hosts and Android-only Health Connect, with separate actual native/device evidence."
+    }
+  ],
+  "statuses": [
+    "PASS",
+    "FAIL",
+    "NOT_RUN",
+    "BLOCKED",
+    "UNSUPPORTED"
+  ],
+  "cases": [
+    {
+      "id": "UI-001",
+      "title": "Library and form control semantics",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Open the exercise library.",
+        "Open a new exercise editor.",
+        "Edit text, numeric fields, primary/secondary muscle choices, equipment, intensity and the HR adjustment switch in the profile."
+      ],
+      "expected": [
+        "Names, labels and units are recognizable and associated with the intended control.",
+        "Editable values and selected sets match application state.",
+        "Buttons, text fields, choices and boolean controls retain their meanings across native renderers."
+      ],
+      "evidence_required": [
+        "Actual host screenshots",
+        "Logical event trace and resulting form state"
+      ],
+      "source_refs": [
+        "README.md",
+        "gui/test/catalog_flow_test.dart"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "UI-002",
+      "title": "Validation and mutually exclusive choices",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Try saving with no primary muscle or equipment.",
+        "Select the same muscle in both roles.",
+        "Select No equipment and then Dumbbell; reverse the order.",
+        "Save a valid draft."
+      ],
+      "expected": [
+        "Invalid draft cannot commit and the user can identify the failing field.",
+        "Primary and secondary assignments are disjoint.",
+        "No equipment excludes actual equipment and actual equipment excludes No equipment.",
+        "Exactly one valid exercise is saved with stable identity."
+      ],
+      "evidence_required": [
+        "Validation screenshots",
+        "Before/after state",
+        "Save event count"
+      ],
+      "source_refs": [
+        "README.md",
+        "core/API.md",
+        "gui/test/catalog_flow_test.dart"
+      ],
+      "fixture_case_ids": [
+        "CAT-07",
+        "CAT-08"
+      ]
+    },
+    {
+      "id": "UI-003",
+      "title": "Search and multiselect filter composition",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Replay the catalog filter vectors.",
+        "Combine two muscle choices, an equipment choice and an intensity.",
+        "Enter mixed-case padded search text.",
+        "Use Clear all and clear one dimension independently."
+      ],
+      "expected": [
+        "OR applies within a dimension and AND across dimensions and search.",
+        "Primary or secondary muscle can satisfy the muscle filter.",
+        "Visible exercise IDs match fixture results in source order.",
+        "Clear all clears visible search text and every dimension; a single-dimension clear changes only that dimension.",
+        "Filtering does not mutate source data."
+      ],
+      "evidence_required": [
+        "Visible ID list",
+        "Event/state trace",
+        "Oracle comparison"
+      ],
+      "source_refs": [
+        "core/API.md",
+        "gui/test/catalog_flow_test.dart"
+      ],
+      "fixture_case_ids": [
+        "CAT-01",
+        "CAT-02",
+        "CAT-03",
+        "CAT-04",
+        "CAT-05",
+        "CAT-06"
+      ]
+    },
+    {
+      "id": "UI-004",
+      "title": "Equipment options and independent intensity",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Create a custom equipment tag with surrounding spaces and a duplicate.",
+        "Assign it to one exercise, filter by it, then remove its last assignment.",
+        "Open an exercise with missing equipment.",
+        "Change intensity without changing MET."
+      ],
+      "expected": [
+        "Assigned tags are trimmed and deduplicated.",
+        "Unused tags and obsolete selections disappear from library filters.",
+        "Missing equipment is Not set, not No equipment.",
+        "Explicit intensity edits preserve MET and do not directly change energy."
+      ],
+      "evidence_required": [
+        "Options before/after",
+        "Saved document diff"
+      ],
+      "source_refs": [
+        "README.md",
+        "core/API.md",
+        "gui/test/catalog_flow_test.dart"
+      ],
+      "fixture_case_ids": [
+        "CAT-07",
+        "CAT-09"
+      ]
+    },
+    {
+      "id": "UI-005",
+      "title": "Stable repeated-row identity",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Add the same exercise twice.",
+        "Edit only the second item.",
+        "Copy it, reorder all three, then delete the first.",
+        "Focus an editable row while reordering another row."
+      ],
+      "expected": [
+        "Every item has an independent unique ID despite shared exercise ID.",
+        "Draft values, focus and callbacks stay with their item rather than list index.",
+        "Copy is immediately after its source before subsequent reorder.",
+        "Deleting one item does not modify its siblings."
+      ],
+      "evidence_required": [
+        "Item ID order after each action",
+        "Event trace",
+        "Screenshot or recording"
+      ],
+      "source_refs": [
+        "core/API.md",
+        "gui/test/app_flow_test.dart"
+      ],
+      "fixture_case_ids": [
+        "PLAN-01",
+        "PLAN-02"
+      ]
+    },
+    {
+      "id": "UI-006",
+      "title": "Editor and file-picker cancellation",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Edit an existing exercise, then cancel.",
+        "Open a media chooser for that exercise, then cancel.",
+        "Reopen the editor."
+      ],
+      "expected": [
+        "Persisted exercise and previous media remain unchanged.",
+        "Cancellation is not displayed as a successful import or destructive error.",
+        "The user can reopen and edit the same exercise."
+      ],
+      "evidence_required": [
+        "Before/after document",
+        "Native chooser cancellation trace"
+      ],
+      "source_refs": [
+        "README.md",
+        "docs/architecture.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "UI-007",
+      "title": "Navigation and usable resizing",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Open each applicable core screen at a wide viewport.",
+        "Resize to the documented desktop minimum.",
+        "If narrow layout is claimed, repeat at 390x844 and test calendar/comparison at 320 pixels wide.",
+        "Navigate away during an active training item, then return."
+      ],
+      "expected": [
+        "Core actions remain reachable without disabling overlap or clipping.",
+        "Native sidebar, drawer, menu or tabs may differ while preserving page/action reachability.",
+        "Active training belongs to application state and survives navigation.",
+        "Screens do not become blank due to unconstrained nested scrolling."
+      ],
+      "evidence_required": [
+        "Viewport dimensions",
+        "Wide and minimum-size screenshots",
+        "Navigation and active-state trace"
+      ],
+      "source_refs": [
+        "gui/test/app_v3_flow_test.dart",
+        "gui/test/analytics_widgets_test.dart",
+        "README.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "UI-008",
+      "title": "Keyboard and named state cues",
+      "profile": "CORE",
+      "origin": "PROPOSED_FRAMEWORK_PROBE",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Navigate the library form and plan commands by keyboard.",
+        "Activate a focused button once.",
+        "Inspect control names and selected/completed/error states with the host accessibility inspector."
+      ],
+      "expected": [
+        "A logical action occurs exactly once per activation.",
+        "Labels and focus order identify the intended controls.",
+        "Selection, completion and error information are not conveyed by color alone.",
+        "Disabled commands cannot activate."
+      ],
+      "evidence_required": [
+        "Keyboard interaction recording",
+        "Accessibility tree excerpt",
+        "Event counts"
+      ],
+      "source_refs": [
+        "docs/architecture.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "UI-009",
+      "title": "Conditional views and standard layout vocabulary",
+      "profile": "CORE",
+      "origin": "PROPOSED_FRAMEWORK_PROBE",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Using the shared declaration, show a label, text input, button, checkbox, single choice and image within row/column/grid/scroll containers.",
+        "Change application state to hide and restore a conditional section.",
+        "Change a supported padding, color and font-size role."
+      ],
+      "expected": [
+        "Each supported primitive has its documented meaning on every host.",
+        "Layout grouping and reading order remain recognizable.",
+        "Conditional removal does not dispatch a spurious logical action.",
+        "Style overrides change presentation without changing domain state."
+      ],
+      "evidence_required": [
+        "Shared declaration source",
+        "Native control inventory",
+        "Before/after screenshots and event trace"
+      ],
+      "source_refs": [
+        "docs/architecture.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "DOM-001",
+      "title": "Execute every frozen business oracle",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/business-cases.json",
+        "fixtures/business-inputs.json"
+      ],
+      "steps": [
+        "Execute every operation/input in business-cases.json using the candidate shared business layer on this host.",
+        "Export observed results using FITNESS_BUSINESS_RESULTS_V1.",
+        "Compare with tools/check_fixtures.py --observed."
+      ],
+      "expected": [
+        "Every case is executed once and all IDs are present without duplicates.",
+        "Identifiers, dates, nulls, booleans, field sets and order match exactly.",
+        "Numeric results satisfy the documented finite-number tolerance.",
+        "Passing by returning the expected JSON without executing business logic is invalid."
+      ],
+      "evidence_required": [
+        "Candidate operation adapter source",
+        "Observed result JSON",
+        "Checker output and host execution log"
+      ],
+      "source_refs": [
+        "core/API.md"
+      ],
+      "fixture_case_ids": [
+        "CAT-01",
+        "CAT-02",
+        "CAT-03",
+        "CAT-04",
+        "CAT-05",
+        "CAT-06",
+        "CAT-07",
+        "CAT-08",
+        "CAT-09",
+        "PLAN-01",
+        "PLAN-02",
+        "REC-01",
+        "REC-02",
+        "REC-03",
+        "REC-04",
+        "MUS-01",
+        "HR-01",
+        "HR-02",
+        "HR-03",
+        "CAL-01",
+        "CAL-02",
+        "CAL-03",
+        "CAL-04",
+        "CAL-05",
+        "CAL-06",
+        "CAL-07",
+        "CAL-08",
+        "AN-01",
+        "AN-02",
+        "AN-03",
+        "AN-04",
+        "AN-05",
+        "AN-06",
+        "AN-07",
+        "AN-08",
+        "AN-09",
+        "AN-10"
+      ]
+    },
+    {
+      "id": "DOM-002",
+      "title": "Plan snapshot and repeated item rules",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Create a plan with two instances of one exercise and distinct duration/repetition/target HR values.",
+        "Set scheduled time for one item.",
+        "Complete one item, then edit its exercise in the catalog."
+      ],
+      "expected": [
+        "Scheduled time does not automatically start training.",
+        "Each item preserves independent settings.",
+        "The completed record retains its captured exercise name, MET and muscles.",
+        "Historical results are not rewritten by catalog edits."
+      ],
+      "evidence_required": [
+        "Plan and record snapshots",
+        "Post-edit aggregate values"
+      ],
+      "source_refs": [
+        "README.md",
+        "docs/architecture.md",
+        "gui/test/app_flow_test.dart"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "DOM-003",
+      "title": "Measured timing and idempotent completion",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Use a controllable clock to Start, Pause, Resume and Complete.",
+        "Attempt a second concurrent Start.",
+        "Send Complete again for the already completed item."
+      ],
+      "expected": [
+        "Only one item is active.",
+        "Active seconds equal the union of closed active intervals; pauses are excluded.",
+        "Completion closes the final interval and records its timestamp.",
+        "The repeated Complete does not create a second record, set or calorie charge."
+      ],
+      "evidence_required": [
+        "Clock inputs",
+        "Event trace",
+        "Segments and totals before/after repeat"
+      ],
+      "source_refs": [
+        "core/API.md",
+        "gui/test/app_flow_test.dart"
+      ],
+      "fixture_case_ids": [
+        "REC-01",
+        "REC-02",
+        "REC-03",
+        "REC-04"
+      ]
+    },
+    {
+      "id": "DOM-004",
+      "title": "Backfill and interrupted-session recovery",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Backfill an unstarted item using an injected completion time.",
+        "In a separate store, persist an open active interval and simulate process interruption.",
+        "Reload and resume/complete using a controlled clock."
+      ],
+      "expected": [
+        "Backfill duration is derived from the plan and visibly marked as backfilled.",
+        "Recovery does not invent the unknown length of an interrupted open interval.",
+        "Previously closed intervals remain intact and subsequent completed time is explicit."
+      ],
+      "evidence_required": [
+        "Saved and recovered state",
+        "Duration-source labels",
+        "Active interval calculation"
+      ],
+      "source_refs": [
+        "README.md",
+        "docs/architecture.md",
+        "gui/test/app_flow_test.dart"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "DOM-005",
+      "title": "Heart-rate import preview and explicit time interpretation",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/heart-rate-synthetic.csv",
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Import heart-rate-synthetic.csv into an isolated store.",
+        "Repeat with equivalent flat JSON and explicit-offset timestamps.",
+        "Supply duplicate timestamps, one invalid BPM and a timezone-free date/time with offset 480.",
+        "Cancel one preview, then confirm another."
+      ],
+      "expected": [
+        "Preview reports valid, invalid and duplicate counts before commit.",
+        "Valid BPM range is 25 through 250 and last valid duplicate wins.",
+        "Timezone-free input uses the supplied fixed offset; explicit offsets and epoch values ignore it.",
+        "Bare time without date is rejected.",
+        "Cancelled preview leaves stored samples unchanged."
+      ],
+      "evidence_required": [
+        "Input files and offset",
+        "Preview screenshots",
+        "Committed samples and errors"
+      ],
+      "source_refs": [
+        "docs/energy-and-import.md",
+        "core/API.md"
+      ],
+      "fixture_case_ids": [
+        "HR-03"
+      ]
+    },
+    {
+      "id": "DOM-006",
+      "title": "Actual HR coverage and honest energy values",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Match HR against a paused record and a record outside sample times.",
+        "Change only target HR.",
+        "Evaluate absent/invalid weight, missing MET, HR adjustment on/off and no matching samples."
+      ],
+      "expected": [
+        "Matching excludes pauses and uncovered intervals; no samples are invented.",
+        "Target HR changes never become measurement or alter matching results.",
+        "Missing weight yields unknown energy with a reason; invalid MET uses the documented estimate flag.",
+        "HR and frequency corrections follow the oracle rules without stacking both."
+      ],
+      "evidence_required": [
+        "Matched intervals/coverage",
+        "Energy output vectors",
+        "Unknown/estimated UI state"
+      ],
+      "source_refs": [
+        "core/API.md",
+        "docs/energy-and-import.md"
+      ],
+      "fixture_case_ids": [
+        "HR-01",
+        "HR-02",
+        "CAL-01",
+        "CAL-02",
+        "CAL-03",
+        "CAL-04",
+        "CAL-05",
+        "CAL-06",
+        "CAL-07"
+      ]
+    },
+    {
+      "id": "DOM-007",
+      "title": "Overlapping and overnight activity",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Aggregate overlapping completed records.",
+        "Split a controlled session across a specified local midnight while retaining group identity.",
+        "Inspect each day and the combined range."
+      ],
+      "expected": [
+        "Daily calories do not charge overlapping clock intervals twice.",
+        "Repetitions are apportioned when effective overlap is removed.",
+        "An overnight physical group counts once on its first active date; minutes appear on each applicable date.",
+        "The adapter reports the chosen zone and split instants; core code does not guess the zone."
+      ],
+      "evidence_required": [
+        "Clock/zone configuration",
+        "Split records",
+        "Per-day and combined results"
+      ],
+      "source_refs": [
+        "core/API.md",
+        "docs/architecture.md"
+      ],
+      "fixture_case_ids": [
+        "CAL-08",
+        "AN-04",
+        "AN-05"
+      ]
+    },
+    {
+      "id": "DOM-008",
+      "title": "Inclusive periods, mode switching and set weights",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Select the fixture day and compare it with the preceding equal-length period.",
+        "Switch actual/planned and sets/weighted minutes.",
+        "Select a zero-prior comparison and an empty period."
+      ],
+      "expected": [
+        "Both date endpoints are included and prior period length is equal in calendar days.",
+        "Primary weight is 1.0 and secondary 0.5; duplicates do not add load.",
+        "Repeated planned items remain separate sets.",
+        "Daily kcal remains actual completed energy even when planned muscle load is shown.",
+        "Zero prior denominator does not produce infinity or a fabricated percent."
+      ],
+      "evidence_required": [
+        "Analysis options and payloads",
+        "Summary/empty-state screenshots"
+      ],
+      "source_refs": [
+        "core/API.md",
+        "gui/test/app_v3_flow_test.dart"
+      ],
+      "fixture_case_ids": [
+        "MUS-01",
+        "AN-01",
+        "AN-02",
+        "AN-03",
+        "AN-06",
+        "AN-07",
+        "AN-08"
+      ]
+    },
+    {
+      "id": "DOM-009",
+      "title": "Calendar dates, progress and navigation",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Open the fixture month, then a leap-year February.",
+        "Select an adjacent-month date cell and open its day details/analysis.",
+        "Navigate to the supported UI year boundaries."
+      ],
+      "expected": [
+        "The calendar has 42 Monday-first cells with correct date/day/in-month values.",
+        "Day details match actual sets/minutes/kcal and planned/completed progress.",
+        "A selected cell uses its represented date, not its index or today.",
+        "Invalid boundary navigation is disabled without malformed dates."
+      ],
+      "evidence_required": [
+        "Calendar payload",
+        "Date-selection event trace",
+        "Boundary screenshots"
+      ],
+      "source_refs": [
+        "core/API.md",
+        "gui/test/analytics_widgets_test.dart",
+        "gui/test/app_v3_flow_test.dart"
+      ],
+      "fixture_case_ids": [
+        "AN-09",
+        "AN-10"
+      ]
+    },
+    {
+      "id": "DOM-010",
+      "title": "Data round-trip and idempotent migration",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Round-trip a document containing slash-bearing metadata keys, integer epoch milliseconds, null values and empty collections.",
+        "Apply catalog migration twice.",
+        "Reload and compare historical snapshots and active state."
+      ],
+      "expected": [
+        "Full keys, integer instants, nulls and collections survive serialization.",
+        "Second migration has no further effect.",
+        "Migration changes only the intended catalog fields; plans, records, snapshots and active timing are preserved.",
+        "Missing equipment is not inferred for arbitrary personal exercises."
+      ],
+      "evidence_required": [
+        "Before/after serialized documents",
+        "Migration diff and equality assertions"
+      ],
+      "source_refs": [
+        "core/API.md",
+        "docs/architecture.md",
+        "gui/test/app_v3_flow_test.dart"
+      ],
+      "fixture_case_ids": [
+        "CAT-09"
+      ]
+    },
+    {
+      "id": "EFFECT-001",
+      "title": "Durable save, ordered writes and retry",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Make several rapid edits while storage is delayed.",
+        "Inject a write failure.",
+        "Perform an unrelated normal action, then retry storage and restart."
+      ],
+      "expected": [
+        "Writes publish complete documents in order, without stale overwrite.",
+        "Failed saves retain in-memory edits and a persistent unsaved indicator.",
+        "Unrelated success feedback does not hide the save error.",
+        "Success is reported only after save; retry and fresh-process reload recover the latest valid data."
+      ],
+      "evidence_required": [
+        "Injected failure/delay setup",
+        "Save order log",
+        "Unsaved screenshot",
+        "Fresh-process document"
+      ],
+      "source_refs": [
+        "docs/architecture.md",
+        "README.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "EFFECT-002",
+      "title": "Corrupt store and backup protection",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Start with a damaged primary and valid previous backup.",
+        "Repeat with both primary and backup damaged."
+      ],
+      "expected": [
+        "Valid backup is recovered according to the documented storage contract.",
+        "When both fail, original files are preserved and automatic overwrite is blocked.",
+        "Failure is visible and does not create a misleading empty successful store."
+      ],
+      "evidence_required": [
+        "Isolated corruption setup",
+        "File hashes before/after",
+        "Load result and error state"
+      ],
+      "source_refs": [
+        "docs/architecture.md",
+        "README.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "EFFECT-003",
+      "title": "Stale asynchronous commits and active-session guard",
+      "profile": "CORE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Start an asynchronous result from document snapshot A.",
+        "Edit the current document before the result returns.",
+        "Attempt to commit the old result.",
+        "Repeat with active training."
+      ],
+      "expected": [
+        "Stale result cannot replace current edits.",
+        "Retry uses a fresh snapshot or a visible conflict; no silent loss occurs.",
+        "An active training session prevents an incompatible merged document commit.",
+        "Completion feedback follows successful persistence."
+      ],
+      "evidence_required": [
+        "Snapshot revisions",
+        "Controlled completion order",
+        "Final document and persistence log"
+      ],
+      "source_refs": [
+        "docs/architecture.md",
+        "gui/test/sync_page_test.dart"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "EFFECT-004",
+      "title": "Cancellation and disposed owner safety",
+      "profile": "CORE",
+      "origin": "PROPOSED_FRAMEWORK_PROBE",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Start an asynchronous effect and leave/remove its owning view before it completes.",
+        "Return a delayed success and a delayed error.",
+        "Reopen the view and run a new operation."
+      ],
+      "expected": [
+        "Disposed ownership prevents callbacks from mutating an obsolete view or reporting false success.",
+        "Timers, subscriptions and scoped operations are cancelled or explicitly transferred to a longer-lived owner.",
+        "The new view receives only its current result and no duplicate handler."
+      ],
+      "evidence_required": [
+        "Lifecycle/event trace",
+        "Resource ownership evidence",
+        "New-view state"
+      ],
+      "source_refs": [
+        "gui/test/health_connect_page_test.dart",
+        "gui/test/lan_sync_test.dart"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "EFFECT-005",
+      "title": "Repeat render without duplicate callbacks",
+      "profile": "CORE",
+      "origin": "PROPOSED_FRAMEWORK_PROBE",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Render the same shared button/list 20 times without logical state change.",
+        "Activate one button once.",
+        "Mount/remove its view 20 times, then activate a fresh instance."
+      ],
+      "expected": [
+        "Each activation dispatches exactly one expected event.",
+        "Removed view handlers no longer fire.",
+        "Resources/listeners return to the documented baseline after disposal."
+      ],
+      "evidence_required": [
+        "Render/mount counts",
+        "Event count assertions",
+        "Subscription/resource counters"
+      ],
+      "source_refs": [
+        "docs/architecture.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "EFFECT-006",
+      "title": "UI thread and background effect boundary",
+      "profile": "CORE",
+      "origin": "PROPOSED_FRAMEWORK_PROBE",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Run a delayed file/network-like effect on the host effect executor.",
+        "While it is pending, interact with a different control.",
+        "Deliver success and failure through the documented dispatcher."
+      ],
+      "expected": [
+        "Native control access respects host thread affinity.",
+        "The independent control remains responsive and events are retained.",
+        "The shared reducer receives serial, explicit success/failure events rather than platform exceptions leaking as false success."
+      ],
+      "evidence_required": [
+        "Thread/dispatcher trace",
+        "Interaction recording",
+        "Reducer event order"
+      ],
+      "source_refs": [
+        "docs/architecture.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "ARCH-001",
+      "title": "Shared application provenance and extension boundaries",
+      "profile": "CORE",
+      "origin": "PROPOSED_FRAMEWORK_PROBE",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Record the exact shared view/event/domain files consumed by each build.",
+        "List every host override and its reason.",
+        "Trace one exercise Save event from native control through shared logic and an effect response."
+      ],
+      "expected": [
+        "The same application declaration and business implementation are actually consumed across hosts.",
+        "Host-specific native code is isolated in declared adapters/extensions.",
+        "Three independently copied applications hidden inside reader conditionals do not satisfy shared-source acceptance."
+      ],
+      "evidence_required": [
+        "Shared source manifest with hashes",
+        "Host override inventory",
+        "Build/source mapping and event trace"
+      ],
+      "source_refs": [
+        "docs/architecture.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "ARCH-002",
+      "title": "Clean downstream consumption and distribution",
+      "profile": "CORE",
+      "origin": "PROPOSED_FRAMEWORK_PROBE",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Use a clean consumer checkout and the promised dependency/package entry points.",
+        "Build and launch the benchmark without editing framework internals.",
+        "Verify required assets/native dependencies and shutdown."
+      ],
+      "expected": [
+        "Documented consumption works for the selected distribution strategy.",
+        "No private absolute development paths or manual internal-source copying are required.",
+        "The launched sample has its required assets and can terminate cleanly."
+      ],
+      "evidence_required": [
+        "Versions and clean setup commands",
+        "Build/run logs",
+        "Distribution inventory"
+      ],
+      "source_refs": [
+        "README.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "ARCH-003",
+      "title": "Capabilities and explicit unsupported state",
+      "profile": "CORE",
+      "origin": "PROPOSED_FRAMEWORK_PROBE",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Query capability availability on the host.",
+        "Request an intentionally unavailable optional provider.",
+        "Try a required provider that has not been implemented."
+      ],
+      "expected": [
+        "Optional unavailability is explicit, with a disabled/unavailable UI state and no fabricated data.",
+        "An unsupported required capability remains a failed gate, not a claimed pass.",
+        "Capability reporting distinguishes language host, operating system and optional native integration."
+      ],
+      "evidence_required": [
+        "Capability report",
+        "Unavailable-state screenshot",
+        "Logical error/result trace"
+      ],
+      "source_refs": [
+        "docs/android.md",
+        "docs/architecture.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "ARCH-004",
+      "title": "Cache validity and reproducible performance observations",
+      "profile": "CORE",
+      "origin": "PROPOSED_FRAMEWORK_PROBE",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Instrument aggregate and HR-index construction for a fixed document/options pair.",
+        "Repeatedly select muscles and switch 2D/3D presentation.",
+        "Change records, samples and range options separately.",
+        "Measure documented cold and warmed interactions on a fixed scale."
+      ],
+      "expected": [
+        "Presentation-only changes do not rescan unchanged training history.",
+        "Changed dependencies invalidate the relevant derived results; no stale values are displayed.",
+        "Hardware, build mode, data scale, sample count and raw observations accompany timing claims.",
+        "This PASS covers cache correctness and measurement completeness; no numeric speed budget or speedup is inferred."
+      ],
+      "evidence_required": [
+        "Call/invalidation counts",
+        "Before/after expected aggregates",
+        "Performance observations with methodology"
+      ],
+      "source_refs": [
+        "docs/architecture.md",
+        "gui/test/app_v3_flow_test.dart"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "EXT-001",
+      "title": "GIF import and stable animated viewport",
+      "profile": "FITNESS_NATIVE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json",
+        "media/synthetic-motion.gif",
+        "media/media-spec.json"
+      ],
+      "steps": [
+        "Import synthetic-motion.gif through the host file chooser.",
+        "Play at least two loops.",
+        "Navigate away and return; test an unavailable media file separately."
+      ],
+      "expected": [
+        "A managed media copy is used without altering the chosen source.",
+        "Frames visibly advance; the result is not merely a static thumbnail.",
+        "The canvas and surrounding layout stay fixed with aspect ratio preserved.",
+        "Missing media produces a usable error state and disposed playback does not leak resources."
+      ],
+      "evidence_required": [
+        "Source/managed-copy hashes",
+        "Two-loop recording",
+        "Viewport dimensions",
+        "Disposal/error evidence"
+      ],
+      "source_refs": [
+        "README.md",
+        "docs/architecture.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "EXT-002",
+      "title": "MP4 native playback and resource disposal",
+      "profile": "FITNESS_NATIVE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json",
+        "An evaluator-supplied neutral MP4; none is included in this package"
+      ],
+      "steps": [
+        "Prepare a neutral supported MP4 and record its hash, codec, dimensions and duration.",
+        "Import, play, loop and seek within it using the host player.",
+        "Replace the media and dispose the view."
+      ],
+      "expected": [
+        "Actual native decoding advances playback rather than showing only a placeholder.",
+        "Playback preserves aspect ratio and stable layout.",
+        "Seek and loop behave according to the documented player controls.",
+        "Old players release resources; error paths remain visible and recoverable."
+      ],
+      "evidence_required": [
+        "Media specification and hash",
+        "Playback/seek recording",
+        "Player lifecycle log"
+      ],
+      "source_refs": [
+        "README.md",
+        "docs/architecture.md",
+        "docs/verification.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "EXT-003",
+      "title": "2D front/back muscle selection",
+      "profile": "FITNESS_NATIVE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/muscle-dictionary.json",
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Render the same load map on front and back body views.",
+        "Select each of the 20 documented muscle IDs using visible regions or equivalent accessible controls.",
+        "Clear selection and change the range."
+      ],
+      "expected": [
+        "All 20 stable IDs have a reachable selection path and correct name.",
+        "Highlight and legend reflect shared load values.",
+        "Selection emits the correct ID once without editing records.",
+        "Native geometry may differ while front/back meaning and selection remain clear."
+      ],
+      "evidence_required": [
+        "Load input and selected-ID trace",
+        "Front/back screenshots",
+        "Record equality assertion"
+      ],
+      "source_refs": [
+        "README.md",
+        "core/API.md",
+        "docs/architecture.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "EXT-004",
+      "title": "Real 3D body interaction and style equivalence",
+      "profile": "FITNESS_NATIVE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Render the body in 3D, rotate it and select a visible muscle.",
+        "Switch between 3D and 2D using the same load map.",
+        "Repeat selection after orientation changes."
+      ],
+      "expected": [
+        "Rotation changes actual view geometry/perspective, not only a static image label.",
+        "Hit selection maps to the correct stable muscle ID.",
+        "Both styles represent the same domain load and selection meaning.",
+        "Orientation/style changes do not alter records or aggregate values."
+      ],
+      "evidence_required": [
+        "Rotation recording",
+        "Selection trace",
+        "Shared load and state equality assertions"
+      ],
+      "source_refs": [
+        "README.md",
+        "docs/architecture.md",
+        "docs/verification.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "EXT-005",
+      "title": "Radar, calorie chart and native comparison views",
+      "profile": "FITNESS_NATIVE",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Display six-region radar, daily calories and current/previous comparisons.",
+        "Switch planned/actual muscle mode and select an empty range.",
+        "Expose a textual/table view of plotted values."
+      ],
+      "expected": [
+        "Chart values come from shared aggregates and retain units.",
+        "Daily kcal stays actual even under planned muscle mode.",
+        "Unknown kcal is distinguishable from zero.",
+        "Empty/zero-prior data does not create misleading full-scale or infinite values.",
+        "Native charts may differ but data and meaning agree."
+      ],
+      "evidence_required": [
+        "Chart payloads",
+        "Visuals and accessible value table",
+        "Mode/empty-state comparisons"
+      ],
+      "source_refs": [
+        "README.md",
+        "core/API.md",
+        "gui/test/app_v3_flow_test.dart"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "EXT-006",
+      "title": "Native split-view and raw child escape hatch",
+      "profile": "FITNESS_NATIVE",
+      "origin": "PROPOSED_FRAMEWORK_PROBE",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Create a shared layout with a native split-view and an embedded host-native child beside shared controls.",
+        "Move the divider and activate both shared and native actions.",
+        "Remove/recreate the native child."
+      ],
+      "expected": [
+        "Host-native implementation can participate in shared input/event/state contracts.",
+        "Divider movement changes presentation only.",
+        "Each action produces its intended logical event once.",
+        "The adapter owns and releases native delegates/resources.",
+        "This is a prospective framework probe; no split-view feature is claimed in the existing app."
+      ],
+      "evidence_required": [
+        "Shared declaration and host extension source",
+        "Native interaction recording",
+        "Event and lifecycle assertions"
+      ],
+      "source_refs": [
+        "docs/architecture.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "INT-001",
+      "title": "Real cross-device pairing and data transfer",
+      "profile": "OPTIONAL_INTEGRATIONS",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr",
+        "dart-android"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Use two isolated stores on actual separate endpoints and a fresh invitation.",
+        "Pair and synchronize exercises, repeated plans, completed records, synthetic HR and user media.",
+        "Reverse the initiating endpoint and synchronize again."
+      ],
+      "expected": [
+        "Both sides hold the intended merged data and locally usable media.",
+        "No success is shown before durable save.",
+        "Repeated transfer is idempotent.",
+        "Evidence explicitly identifies physical/emulator/loopback topology; loopback alone does not pass this real cross-device case."
+      ],
+      "evidence_required": [
+        "Redacted topology/device versions",
+        "Before/after documents and media hashes",
+        "Observed paired-device and commit counts",
+        "Actual UI success and reload evidence"
+      ],
+      "source_refs": [
+        "docs/lan-sync.md",
+        "docs/verification.md"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "INT-002",
+      "title": "Sync conflicts, deletion and failure recovery",
+      "profile": "OPTIONAL_INTEGRATIONS",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr",
+        "dart-android"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Edit the same entity independently on both endpoints and sync.",
+        "Resolve the conflict, sync, then delete an entity and sync again.",
+        "Inject a dropped connection and a receiving-side save failure, then retry."
+      ],
+      "expected": [
+        "Concurrent variants remain available for explicit resolution.",
+        "Resolution propagates and deletions do not resurrect through retry.",
+        "Partial failure is not reported as whole-operation success.",
+        "Retry preserves local edits and converges without duplicate records or media."
+      ],
+      "evidence_required": [
+        "Version/conflict and tombstone snapshots",
+        "Failure/ retry logs",
+        "Post-restart equality assertions"
+      ],
+      "source_refs": [
+        "docs/lan-sync.md",
+        "gui/test/lan_sync_test.dart",
+        "gui/test/sync_page_test.dart"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "INT-003",
+      "title": "Sync security and bounded media handling",
+      "profile": "OPTIONAL_INTEGRATIONS",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "jvm",
+        "dart",
+        "clr",
+        "dart-android"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Attempt wrong-key, replayed, expired and revoked invitations/requests.",
+        "Attempt disallowed address/redirect, oversized media and traversal/hash-mismatched media.",
+        "Close the scoped sync page during transfer."
+      ],
+      "expected": [
+        "Unauthenticated/replayed/disallowed requests are rejected without mutation.",
+        "Paths, total/single sizes and content digests are validated before publishing usable media.",
+        "Temporary failed media is not referenced as a valid playable file.",
+        "Scoped transfer/service effects stop on disposal according to the documented foreground contract."
+      ],
+      "evidence_required": [
+        "Adversarial test inputs with secrets redacted",
+        "Rejection and unchanged-store assertions",
+        "Shutdown/resource log"
+      ],
+      "source_refs": [
+        "docs/lan-sync.md",
+        "gui/test/lan_sync_test.dart"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "INT-004",
+      "title": "Android native permission and empty-query flow",
+      "profile": "OPTIONAL_INTEGRATIONS",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "dart-android"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "On a supported Android device/build request read-only HR permission.",
+        "Test denial and subsequent grant; query an empty fixed range.",
+        "Revoke permission and return to the app."
+      ],
+      "expected": [
+        "Permission state is refreshed and failure/denial is explicit.",
+        "The application requests only its documented read capabilities.",
+        "Empty query shows zero records/samples and cannot be falsely imported/exported as a populated batch.",
+        "Unavailable native capability never fabricates HR."
+      ],
+      "evidence_required": [
+        "Android/Health Connect versions",
+        "Native permission and empty-result screenshots",
+        "Permission-revocation result"
+      ],
+      "source_refs": [
+        "docs/android.md",
+        "docs/verification.md",
+        "gui/test/health_connect_page_test.dart"
+      ],
+      "fixture_case_ids": []
+    },
+    {
+      "id": "INT-005",
+      "title": "Nonempty native heart-rate import and downstream sync",
+      "profile": "OPTIONAL_INTEGRATIONS",
+      "origin": "BASELINE_DERIVED",
+      "mandatory": true,
+      "applicable_hosts": [
+        "dart-android"
+      ],
+      "initial_fixture": [
+        "fixtures/demo-document.json"
+      ],
+      "steps": [
+        "Create or supply an authorized nonempty synthetic Health Connect dataset with known source, timestamps and values.",
+        "Read a fixed explicit range, select source and confirm import.",
+        "Repeat the batch and verify persistence, then transfer it to another endpoint if HR sync parity is claimed.",
+        "Test historical access separately when claimed."
+      ],
+      "expected": [
+        "Real native sample values and counts match the known dataset and range.",
+        "Batch/source provenance is retained and duplicate confirmation does not duplicate samples.",
+        "Success follows durable local save.",
+        "Any claimed downstream transfer preserves timestamps, values and provenance.",
+        "Real Samsung or historical-access support requires its own actual evidence, not a mock or empty query."
+      ],
+      "evidence_required": [
+        "Known authorized dataset provenance",
+        "Native query counts and imported batch",
+        "Fresh-process reload",
+        "Actual transfer and historical-access evidence where claimed"
+      ],
+      "source_refs": [
+        "docs/android.md",
+        "docs/verification.md"
+      ],
+      "fixture_case_ids": []
+    }
+  ]
+}

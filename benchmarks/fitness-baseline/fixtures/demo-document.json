@@ -1,0 +1,243 @@
+{
+  "version": 1,
+  "exercises": [
+    {
+      "id": "press",
+      "name": {
+        "en": "Band Chest Press",
+        "zh": "Band Chest Press"
+      },
+      "primary": [
+        "pectoralis-major"
+      ],
+      "secondary": [
+        "triceps-brachii"
+      ],
+      "intensity": "medium",
+      "equipment": [
+        "Resistance band",
+        "Weight bench"
+      ],
+      "met": 4.0,
+      "reference-rpm": 10
+    },
+    {
+      "id": "curl",
+      "name": {
+        "en": "Dumbbell Curl",
+        "zh": "Dumbbell Curl"
+      },
+      "primary": [
+        "biceps-brachii"
+      ],
+      "secondary": [],
+      "intensity": "low",
+      "equipment": [
+        "Dumbbell"
+      ],
+      "met": 2.5,
+      "reference-rpm": 10
+    },
+    {
+      "id": "pushup",
+      "name": {
+        "en": "Push-up",
+        "zh": "Push-up"
+      },
+      "primary": [
+        "pectoralis-major"
+      ],
+      "secondary": [
+        "triceps-brachii"
+      ],
+      "intensity": "high",
+      "equipment": [
+        "No equipment"
+      ],
+      "met": 6.0,
+      "reference-rpm": 10
+    },
+    {
+      "id": "mobility",
+      "name": "Hip mobility",
+      "primary": [
+        "quadriceps"
+      ],
+      "secondary": [
+        "gluteus-medius"
+      ],
+      "met": 2.0
+    }
+  ],
+  "plans": [
+    {
+      "id": "plan-13",
+      "date": "2026-10-13",
+      "name": "Synthetic strength session",
+      "items": [
+        {
+          "id": "press-a",
+          "exercise-id": "press",
+          "duration-sec": 90,
+          "reps": 15,
+          "target-hr": 140,
+          "scheduled-time": "12:00"
+        },
+        {
+          "id": "press-b",
+          "exercise-id": "press",
+          "duration-sec": 60,
+          "reps": 10,
+          "target-hr": 145,
+          "scheduled-time": "12:03"
+        },
+        {
+          "id": "curl-a",
+          "exercise-id": "curl",
+          "duration-sec": 60,
+          "reps": 10,
+          "target-hr": 130,
+          "scheduled-time": "12:05"
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "id": "record-previous",
+      "plan-id": "previous-plan",
+      "item-id": "previous-item",
+      "exercise": {
+        "id": "press",
+        "name": {
+          "en": "Band Chest Press",
+          "zh": "Band Chest Press"
+        },
+        "primary": [
+          "pectoralis-major"
+        ],
+        "secondary": [
+          "triceps-brachii"
+        ],
+        "intensity": "medium",
+        "equipment": [
+          "Resistance band",
+          "Weight bench"
+        ],
+        "met": 4.0,
+        "reference-rpm": 10
+      },
+      "started-at": 1791806400000,
+      "completed-at": 1791806460000,
+      "segments": [
+        [
+          1791806400000,
+          1791806460000
+        ]
+      ],
+      "reps": 10,
+      "target-hr": 140,
+      "date": "2026-10-12",
+      "duration-source": "timer"
+    },
+    {
+      "id": "record-press-a",
+      "plan-id": "plan-13",
+      "item-id": "press-a",
+      "exercise": {
+        "id": "press",
+        "name": {
+          "en": "Band Chest Press",
+          "zh": "Band Chest Press"
+        },
+        "primary": [
+          "pectoralis-major"
+        ],
+        "secondary": [
+          "triceps-brachii"
+        ],
+        "intensity": "medium",
+        "equipment": [
+          "Resistance band",
+          "Weight bench"
+        ],
+        "met": 4.0,
+        "reference-rpm": 10
+      },
+      "started-at": 1791892800000,
+      "completed-at": 1791892920000,
+      "segments": [
+        [
+          1791892800000,
+          1791892860000
+        ],
+        [
+          1791892890000,
+          1791892920000
+        ]
+      ],
+      "reps": 15,
+      "target-hr": 140,
+      "date": "2026-10-13",
+      "duration-source": "timer"
+    },
+    {
+      "id": "record-press-b",
+      "plan-id": "plan-13",
+      "item-id": "press-b",
+      "exercise": {
+        "id": "press",
+        "name": {
+          "en": "Band Chest Press",
+          "zh": "Band Chest Press"
+        },
+        "primary": [
+          "pectoralis-major"
+        ],
+        "secondary": [
+          "triceps-brachii"
+        ],
+        "intensity": "medium",
+        "equipment": [
+          "Resistance band",
+          "Weight bench"
+        ],
+        "met": 4.0,
+        "reference-rpm": 10
+      },
+      "started-at": 1791892980000,
+      "completed-at": 1791893040000,
+      "segments": [
+        [
+          1791892980000,
+          1791893040000
+        ]
+      ],
+      "reps": 10,
+      "target-hr": 140,
+      "date": "2026-10-13",
+      "duration-source": "timer"
+    }
+  ],
+  "heart-rate": [
+    {
+      "timestamp": 1791892800000,
+      "bpm": 100,
+      "end-at": 1791892860000
+    },
+    {
+      "timestamp": 1791892890000,
+      "bpm": 120,
+      "end-at": 1791892920000
+    }
+  ],
+  "profile": {
+    "weight-kg": 70,
+    "resting-hr": 60,
+    "max-hr": 160,
+    "use-hr?": false,
+    "example?": true
+  },
+  "heart-rate-batches": [],
+  "active": null
+}

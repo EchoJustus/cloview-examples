@@ -1,0 +1,8 @@
+;; Fitness example — the shared .cljc application, consumed by the jvm / flutter / clr
+;; entry points: the frozen reference core (clogem.fitness.*) and the app layer (fitness.*).
+;;   clj -M:test     ; reference unit tests + app tests + DOM-001 oracles (fitness.verify)
+{:paths ["src"]
+ :deps {cloview/core {:local/root "../../../../cloview-core/modules/core"}
+        cloview/fx {:local/root "../../../../cloview-core/modules/fx"}}
+ :aliases {:test {:extra-paths ["test"]
+                  :main-opts ["-m" "fitness.verify"]}}}

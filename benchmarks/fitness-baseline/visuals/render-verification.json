@@ -1,0 +1,72 @@
+{
+  "record_version": 1,
+  "date": "2026-10-23",
+  "baseline_version": "0.3.0+3",
+  "classification": "english-localized-component-reference",
+  "test_scope": "isolated Flutter widget gallery using translated copies of actual baseline components",
+  "flutter_version": "3.29.3",
+  "dart_version": "3.7.2",
+  "pixel_ratio": 1,
+  "font": "Segoe UI, loaded locally and not redistributed",
+  "icon_font": "Flutter MaterialIcons, loaded locally and not redistributed",
+  "test_command": "flutter test test/reference_gallery_test.dart --reporter expanded",
+  "tests_passed": 1,
+  "assertions": [
+    "3D body exists before switching",
+    "2D body exists after switching",
+    "2D hit-test emits pectoralis-major",
+    "42 calendar cells exist",
+    "date click emits exactly one 2026-10-16 event",
+    "next month emits 2026-11",
+    "390-pixel drawer navigation emits exactly one library event",
+    "no widget exceptions during captures or interactions"
+  ],
+  "captures": [
+    {
+      "file": "desktop-analysis-2d.png",
+      "width": 1600,
+      "height": 1100,
+      "sha256": "075d739819f798b60bb85e63b83faf12f584490f3965eb6c4680a349b60654d4"
+    },
+    {
+      "file": "desktop-analysis-3d.png",
+      "width": 1600,
+      "height": 1100,
+      "sha256": "0c6949c99bfa2e0af9fa4429e7bff2927ebd59dc018fc9920b98dbd8b43ea5a0"
+    },
+    {
+      "file": "desktop-calendar.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "02457f0d62adf678bc6740917b8ce77a49a36c77111c3f47d23da0454bbe5713"
+    },
+    {
+      "file": "mobile-calendar.png",
+      "width": 390,
+      "height": 1180,
+      "sha256": "e34463686781762198394b37337bf23c219e3513d5c66ce9a3a283811b44e645"
+    }
+  ],
+  "data": "synthetic presentation fixture, not a numerical oracle or personal record",
+  "visual_review": "English labels, icons and major layout inspected",
+  "not_verified_here": [
+    "complete application persistence",
+    "native window interaction",
+    "JVM host",
+    "CLR host",
+    "performance improvement",
+    "media import or playback",
+    "Health Connect",
+    "LAN synchronization"
+  ],
+  "audit_date": "2026-10-24",
+  "audit_scope": [
+    "All four PNGs visually reviewed for readable English and explicit derivative banners",
+    "PNG dimensions verified; no EXIF, only standard sRGB rendering intent reported by Pillow",
+    "Three source hashes verified against original baseline files",
+    "Derivative source verified as exact declared text/font substitution with original source logic retained",
+    "Presentation JSON checked against gallery calendar construction and comparison/body/radar/energy constants",
+    "All public visual/reference source and documentation scanned as ASCII with no local machine paths",
+    "Rendering dependency lockfile added; no rerender or new host test claimed by this audit"
+  ]
+}

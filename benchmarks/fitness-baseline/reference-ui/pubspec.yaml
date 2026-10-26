@@ -1,0 +1,14 @@
+name: fitness_baseline_visual_reference
+description: English localized component references derived from the fitness baseline.
+publish_to: none
+version: 1.0.0
+environment:
+  sdk: '>=3.7.2 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+  uses-material-design: true

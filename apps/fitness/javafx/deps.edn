@@ -1,0 +1,15 @@
+;; Fitness on JavaFX (cljfx).
+;;   clj -M:run        ; interactive window
+;;   clj -M:smoke      ; off-screen smoke -> ../../../verify/out/fitness-jvm-smoke.json
+;; (bb run:fitness:javafx / bb smoke:fitness:javafx do the same from the repo root.)
+{:paths ["src"]
+ :deps {org.clojure/clojure {:mvn/version "1.12.6"}
+        cloview/javafx {:local/root "../../../../cloview-core/modules/javafx"}
+        fitness/shared {:local/root "../shared"}}
+ :aliases {:run {:main-opts ["-m" "fitness.javafx.main"]}
+           :smoke {:extra-deps {cloview/verify {:local/root "../../../../cloview-core/verify"}}
+                   :main-opts ["-m" "fitness.javafx.smoke" "../../../verify/out/fitness-jvm-smoke.json"]}
+           :cljfx-git {:override-deps
+                       {cljfx/cljfx {:git/url "https://github.com/cljfx/cljfx"
+                                     :git/tag "1.10.363"
+                                     :git/sha "6bee510722fbb12d4f7ac447d413a77894bd7e33"}}}}}

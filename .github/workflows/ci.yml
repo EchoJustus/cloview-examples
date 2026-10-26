@@ -1,0 +1,144 @@
+# CI on GitHub-hosted runners (free for public repositories): the example apps' checks
+# that need no Windows desktop. cloview-core is checked out next to this repository
+# (../cloview-core, the layout the deps.edn files expect), at its default branch unless
+# the run is started by hand with another ref. Results: the job summary, and the
+# `*-results` artifacts (verify/out).
+name: ci
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**/*.md', 'docs/**']
+  pull_request:
+    paths-ignore: ['**/*.md', 'docs/**']
+  workflow_dispatch:
+    inputs:
+      core_ref:
+        description: 'cloview-core branch, tag or commit to test against'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    name: Fitness tests, oracles, static check, smoke, benchmark checkers
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: cloview-examples
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: cloview-examples
+
+      - uses: actions/checkout@v7
+        with:
+          repository: echojustus/cloview-core
+          ref: ${{ inputs.core_ref }}
+          path: cloview-core
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: DeLaGuardo/setup-clojure@13.7
+        with:
+          cli: latest
+
+      - uses: actions/cache@v6
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.gitlibs
+          key: clj-${{ runner.os }}-${{ hashFiles('cloview-examples/**/deps.edn', 'cloview-core/**/deps.edn') }}
+
+      - name: Fitness unit tests and the 37 business oracles
+        run: clojure -M:fitness --out-dir verify/out
+
+      - name: Static check of apps/ against cloview-core
+        run: clojure -M:static-check
+
+      # The fitness app off-screen on JavaFX (Xvfb, software rendering). Experimental until
+      # its first green run on a hosted runner.
+      - name: JavaFX smoke of the fitness app (Xvfb)
+        continue-on-error: true
+        run: xvfb-run -a clojure -J-Dprism.order=sw -M:smoke-fitness-javafx verify/out/fitness-jvm-smoke.json
+
+      - name: Benchmark checkers
+        working-directory: cloview-examples/benchmarks/fitness-baseline
+        run: |
+          python3 -I tools/check_package.py
+          python3 -I tools/check_fixtures.py
+          python3 -I tools/check_fixtures.py --observed ../../verify/out/fitness-jvm-business-results.json
+
+      - name: Summary
+        if: always()
+        run: python3 -I ../cloview-core/ops/tools/ci_summary.py verify/out >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: linux-results
+          path: cloview-examples/verify/out/
+          retention-days: 14
+
+  clr:
+    # Experimental until its first green run, like cloview-core's clr job: the fitness tests
+    # and oracles on ClojureCLR through the Clojure.Main tool (the Windows harness runs
+    # them inside the real WPF host).
+    name: Fitness on ClojureCLR (experimental)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    continue-on-error: true
+    defaults:
+      run:
+        working-directory: cloview-examples
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: cloview-examples
+
+      - uses: actions/checkout@v7
+        with:
+          repository: echojustus/cloview-core
+          ref: ${{ inputs.core_ref }}
+          path: cloview-core
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: Install ClojureCLR
+        run: dotnet tool install --global Clojure.Main --version 1.12.6
+
+      - name: Fitness unit tests and oracles
+        run: |
+          mkdir -p verify/out
+          C="$PWD/../cloview-core"
+          export CLOJURE_LOAD_PATH="$C/modules/core/src:$C/modules/fx/src:$PWD/apps/fitness/shared/src:$PWD/apps/fitness/shared/test"
+          Clojure.Main -e "(require 'fitness.verify) (System.Environment/Exit (fitness.verify/run-tests! \"verify/out/fitness-clr-summary.json\"))"
+
+      - name: --observed check of the CLR envelope
+        working-directory: cloview-examples/benchmarks/fitness-baseline
+        run: python3 -I tools/check_fixtures.py --observed ../../verify/out/fitness-clr-business-results.json
+
+      - name: Summary
+        if: always()
+        run: python3 -I ../cloview-core/ops/tools/ci_summary.py verify/out >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: clr-results
+          path: cloview-examples/verify/out/
+          retention-days: 14

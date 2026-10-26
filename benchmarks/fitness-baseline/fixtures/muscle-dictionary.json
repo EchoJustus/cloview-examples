@@ -1,0 +1,82 @@
+[
+  {
+    "id": "pectoralis-major",
+    "name": "Pectoralis major"
+  },
+  {
+    "id": "latissimus-dorsi",
+    "name": "Latissimus dorsi"
+  },
+  {
+    "id": "trapezius",
+    "name": "Trapezius"
+  },
+  {
+    "id": "rhomboids",
+    "name": "Rhomboids"
+  },
+  {
+    "id": "anterior-deltoid",
+    "name": "Anterior deltoid"
+  },
+  {
+    "id": "lateral-deltoid",
+    "name": "Lateral deltoid"
+  },
+  {
+    "id": "posterior-deltoid",
+    "name": "Posterior deltoid"
+  },
+  {
+    "id": "biceps-brachii",
+    "name": "Biceps brachii"
+  },
+  {
+    "id": "triceps-brachii",
+    "name": "Triceps brachii"
+  },
+  {
+    "id": "rectus-abdominis",
+    "name": "Rectus abdominis"
+  },
+  {
+    "id": "obliques",
+    "name": "Obliques"
+  },
+  {
+    "id": "erector-spinae",
+    "name": "Erector spinae"
+  },
+  {
+    "id": "gluteus-maximus",
+    "name": "Gluteus maximus"
+  },
+  {
+    "id": "gluteus-medius",
+    "name": "Gluteus medius"
+  },
+  {
+    "id": "quadriceps",
+    "name": "Quadriceps"
+  },
+  {
+    "id": "rectus-femoris",
+    "name": "Rectus femoris"
+  },
+  {
+    "id": "hamstrings",
+    "name": "Hamstrings"
+  },
+  {
+    "id": "iliopsoas",
+    "name": "Iliopsoas"
+  },
+  {
+    "id": "gastrocnemius",
+    "name": "Gastrocnemius"
+  },
+  {
+    "id": "soleus",
+    "name": "Soleus"
+  }
+]

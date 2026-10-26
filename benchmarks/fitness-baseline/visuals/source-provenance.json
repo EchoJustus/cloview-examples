@@ -1,0 +1,23 @@
+[
+  {
+    "source": "gui/lib/muscle_view.dart",
+    "source_sha256": "532db11d7a145b3f9875a4b4b29a808c2d134e4366567b07151e63d60d5c19b6",
+    "derivative": "reference-ui/lib/muscle_view.dart",
+    "changes": "English text and ASCII punctuation; font family set to BaselineSans. No geometry, state, event or numeric logic changes.",
+    "derivative_sha256": "28b86d8ed7189f550d4a9acd89db824fc10b364b403585e1c7fdeb2a51ec2690"
+  },
+  {
+    "source": "gui/lib/analytics_widgets.dart",
+    "source_sha256": "dd279cffd09ce82f97a7e0c02c707d297d41d554c995a62eb4878fcef61061ed",
+    "derivative": "reference-ui/lib/analytics_widgets.dart",
+    "changes": "English text and ASCII punctuation; font family set to BaselineSans. No geometry, state, event or numeric logic changes.",
+    "derivative_sha256": "8f87af0ad917a3cb7111186ee0b1a0753362d795d513f9bde3f600845d02c8b8"
+  },
+  {
+    "source": "gui/lib/app_shell.dart",
+    "source_sha256": "8cf0b06ff73e2e8cd7d9c9bd551d9fda07adccf3ef16bb3c492ba167e398c3ed",
+    "derivative": "reference-ui/lib/app_shell.dart",
+    "changes": "English text and ASCII punctuation; font family set to BaselineSans. No geometry, state, event or numeric logic changes.",
+    "derivative_sha256": "8b4713c3dd5315f5e001326aadcee6723b23d4812a58c5ea7787ffb32d7d7f29"
+  }
+]

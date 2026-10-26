@@ -1,0 +1,64 @@
+(ns fitness.flutter.fitness-test
+  "Fitness on Flutter: the shell renders and reacts (widget test), and DOM-001 — every
+  frozen business oracle — runs on Dart and writes verify/out/fitness-dart-business-results.json
+  for benchmarks/fitness-baseline/tools/check_fixtures.py --observed.
+
+    clj -M:test:cljd test   (in target/flutter-fitness; the shared clogem.fitness.* and
+                             fitness.app tests are copied next to this file by the harness)"
+  (:require ["package:flutter/material.dart" :as m]
+            ["package:flutter_test/flutter_test.dart" :as ft]
+            [cljd.test :refer [deftest is]]
+            [cloview.core.store :as st]
+            [cloview.flutter.app :as flutter]
+            [cloview.flutter.material :as mat]
+            [fitness.app :as app]
+            [fitness.demo :as demo]
+            [fitness.flutter.native :as natives]
+            [fitness.native :as native]
+            [fitness.verify :as verify]
+            [fitness.views :as views]))
+
+(defn- by-test-id
+  "Finder for a node's :test-id. The key is built by mat/value-key, like the adapters
+  build it, so both ValueKeys have the same runtime type (ValueKey == compares it)."
+  [id]
+  (ft/find.byKey (mat/value-key (str "test-id:" id))))
+
+(deftest business-oracles-on-dart
+  (let [{:keys [exit summary]} (verify/verify! {:host "dart" :revision "flutter-test"})]
+    (is (= 37 (:total summary)))
+    (is (= 0 exit))))
+
+(deftest fitness-shell
+  :runner (ft/testWidgets [tester])
+  (app/register!)
+  (st/reg-cofx :fitness/today (fn [cofx] (assoc cofx :today "2026-10-25")))
+  (let [^ft/WidgetTester tester tester
+        store (st/create-store {:db (app/initial-db demo/document "2026-10-25")})
+        view (.-view tester)]
+    (native/register-renderers! (natives/renderers {:dispatch! #(st/dispatch! store %)}))
+    (.-physicalSize! view (m/Size 1400.0 2400.0))
+    (.-devicePixelRatio! view 1.0)
+    (await (.pumpWidget tester (flutter/app-widget {:store store :view views/root :title "fitness"})))
+    (ft/expect (ft/find.text "4 of 4 exercises") ft/findsOneWidget)
+    ;; a filter chip: one event, the filtered list follows
+    (await (.tap tester (by-test-id "filter-muscles/triceps-brachii")))
+    (await (.pump tester))
+    (ft/expect (= #{"triceps-brachii"} (get-in (st/db store) [:catalog :filters :muscles])) ft/isTrue)
+    (ft/expect (ft/find.text "2 of 4 exercises") ft/findsOneWidget)
+    (await (.tap tester (by-test-id "catalog-clear")))
+    (await (.pump tester))
+    (ft/expect (ft/find.text "4 of 4 exercises") ft/findsOneWidget)
+    ;; analytics: the CustomPaint natives are mounted
+    (st/dispatch! store [:nav/tab :analytics])
+    (await (.pumpAndSettle tester))
+    (ft/expect (by-test-id "body-map-canvas") ft/findsOneWidget)
+    (ft/expect (by-test-id "radar-canvas") ft/findsOneWidget)
+    ;; calendar: a date cell selects its exact date
+    (st/dispatch! store [:nav/tab :calendar])
+    (await (.pumpAndSettle tester))
+    (await (.tap tester (by-test-id "calendar/2026-10-12")))
+    (await (.pump tester))
+    (ft/expect (get-in (st/db store) [:calendar :selected]) (ft/equals "2026-10-12"))
+    (.resetPhysicalSize view)
+    (.resetDevicePixelRatio view)))

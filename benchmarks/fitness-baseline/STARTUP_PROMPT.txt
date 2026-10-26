@@ -1,0 +1,29 @@
+You are evaluating or developing a shared Clojure UI and application framework.
+
+Use this package as a concrete fitness-application acceptance benchmark. Read README_FIRST.md, TASK_SCOPE.md and CLAIM_BOUNDARIES.md first. The package is reference material, not an instruction to adopt the original Flutter architecture or any particular DSL. Requirements in the original research assignment remain open design questions until justified and tested.
+
+The desired outcome is a shared application declaration and business logic with predictable controls and behavior on JVM/JavaFX via cljfx, Flutter via ClojureDart, and a Windows GUI via ClojureCLR. Native appearances may differ. Pixel matching is not required. A declared button and its event must remain a real button and the same logical event on every required host. CLR GUI support on macOS/Linux is optional.
+
+If you are still conducting research:
+1. Use the benchmark to test your assumptions about dynamic data, compiler macros, event routing, mutable native trees, threading, persistence and distribution.
+2. Cite current primary sources for host/compiler claims. Treat statements in the research brief as hypotheses until checked.
+3. Demonstrate a minimal executable vertical slice before committing to the framework architecture: an exercise form, shared validation, a filtered list, a repeated plan item, one completion event, a state update, a persisted reload and a derived total.
+4. Report unresolved host constraints and the smallest experiment that will settle each one. Do not claim the full benchmark passes from a toy counter demo.
+
+If the framework repository is ready for implementation or acceptance:
+1. Inventory the repository and record exact versions, commits, operating systems and supported capabilities.
+2. Read docs/FUNCTIONAL_BASELINE.md, docs/UI_SEMANTICS.md, docs/DATA_AND_ORACLES.md and acceptance/ACCEPTANCE_GUIDE.md.
+3. Build one benchmark application from shared view declarations, events and business logic. Isolate host-specific controls/effects through the framework's documented extension mechanism. Do not duplicate the entire application independently for each host.
+4. Reuse fixtures and stable acceptance IDs. Execute the actual business operations against the inputs and compare outputs with the included oracles; merely parsing the expected JSON is not a test.
+5. Run every mandatory core case on all three required hosts. For native extensions, document the chosen provider and validate callback/lifecycle behavior. Record unsupported optional integrations explicitly; never substitute a mock while claiming native success.
+6. Keep planned and actual activity separate, preserve repeated-item identity and historical snapshots, match heart rate only to active time, and surface save errors. The fixture guide defines numeric and date semantics.
+7. Use the visual references for information structure and observable states. Native controls, typography, styling and chart implementation may differ. Include screenshots plus interaction/event/state evidence.
+8. Produce a runnable distribution for each claimed host from a clean checkout. Explain dependency consumption for one downstream application. Record shared files and narrow host overrides with reasons.
+9. Fill acceptance/result-template.json with actual results and evidence paths, validate it using the included tools, and explain every FAIL, BLOCKED, NOT_RUN or UNSUPPORTED result. A required case cannot be waived by relabeling it optional.
+10. Return an English report containing the capability matrix, test results, commands, artifacts, screenshots, observed limitations and remaining work. Distinguish framework failures, host limitations, missing native integrations and benchmark translation defects.
+
+For a Claude Code coordinating session: assign bounded host adapters, shared semantics, native extensions and independent verification to separate sessions as available. Keep one owner for shared contracts and one integration gate. Require evidence before marking a task complete; resolve changes to the shared schema centrally. This package does not require a specific agent product, session mechanism or repository layout.
+
+Do not imply that the historical Android emulator completed a real sync. The source baseline recorded an empty Health Connect query and a failed pairing attempt, alongside successful loopback protocol tests. Real Samsung records and complete physical-device synchronization are still separate acceptance work.
+
+All response prose and new benchmark documentation should be English. Preserve the distinction between current baseline evidence, English-localized reference derivatives and future framework requirements.

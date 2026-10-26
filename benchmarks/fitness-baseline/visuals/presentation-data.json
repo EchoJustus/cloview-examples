@@ -1,0 +1,472 @@
+{
+  "classification": "synthetic presentation values, not business oracles",
+  "distinct_from": "fixtures/demo-document.json",
+  "selected-date": "2026-10-16",
+  "analytics-payload": {
+    "metric": "sets",
+    "mode": "actual",
+    "range": {
+      "from": "2026-10-10",
+      "to": "2026-10-16"
+    },
+    "previous-range": {
+      "from": "2026-10-03",
+      "to": "2026-10-09"
+    },
+    "comparison": {
+      "duration-min": {
+        "current": 18,
+        "previous": 12,
+        "delta": 6,
+        "percent": 50
+      },
+      "sets": {
+        "current": 5,
+        "previous": 3,
+        "delta": 2,
+        "percent": 66.6667
+      },
+      "training-days": {
+        "current": 2,
+        "previous": 1,
+        "delta": 1,
+        "percent": 100
+      },
+      "muscles": [
+        {
+          "id": "pectoralis-major",
+          "name": "Pectoralis major",
+          "current": 3,
+          "previous": 1
+        },
+        {
+          "id": "latissimus-dorsi",
+          "name": "Latissimus dorsi",
+          "current": 2,
+          "previous": 2
+        },
+        {
+          "id": "triceps-brachii",
+          "name": "Triceps brachii",
+          "current": 1.5,
+          "previous": 0.5
+        },
+        {
+          "id": "biceps-brachii",
+          "name": "Biceps brachii",
+          "current": 1,
+          "previous": 1
+        }
+      ]
+    },
+    "calendar": {
+      "month": "2026-10",
+      "cells": [
+        {
+          "date": "2026-09-28",
+          "day": 28,
+          "in-month?": false,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-09-29",
+          "day": 29,
+          "in-month?": false,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-09-30",
+          "day": 30,
+          "in-month?": false,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-01",
+          "day": 1,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-02",
+          "day": 2,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-03",
+          "day": 3,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-04",
+          "day": 4,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-05",
+          "day": 5,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-06",
+          "day": 6,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-07",
+          "day": 7,
+          "in-month?": true,
+          "duration-min": 12.0,
+          "sets": 3,
+          "planned-items": 3,
+          "plan-complete?": true,
+          "kcal": 51.449999999999996
+        },
+        {
+          "date": "2026-10-08",
+          "day": 8,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-09",
+          "day": 9,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-10",
+          "day": 10,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-11",
+          "day": 11,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-12",
+          "day": 12,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-13",
+          "day": 13,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-14",
+          "day": 14,
+          "in-month?": true,
+          "duration-min": 6.0,
+          "sets": 2,
+          "planned-items": 3,
+          "plan-complete?": false,
+          "kcal": 25.724999999999998
+        },
+        {
+          "date": "2026-10-15",
+          "day": 15,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-16",
+          "day": 16,
+          "in-month?": true,
+          "duration-min": 12.0,
+          "sets": 3,
+          "planned-items": 3,
+          "plan-complete?": true,
+          "kcal": 51.449999999999996
+        },
+        {
+          "date": "2026-10-17",
+          "day": 17,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-18",
+          "day": 18,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-19",
+          "day": 19,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 3,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-20",
+          "day": 20,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-21",
+          "day": 21,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-22",
+          "day": 22,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-23",
+          "day": 23,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-24",
+          "day": 24,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-25",
+          "day": 25,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-26",
+          "day": 26,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-27",
+          "day": 27,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-28",
+          "day": 28,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-29",
+          "day": 29,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-30",
+          "day": 30,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-10-31",
+          "day": 31,
+          "in-month?": true,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-11-01",
+          "day": 1,
+          "in-month?": false,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-11-02",
+          "day": 2,
+          "in-month?": false,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-11-03",
+          "day": 3,
+          "in-month?": false,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-11-04",
+          "day": 4,
+          "in-month?": false,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-11-05",
+          "day": 5,
+          "in-month?": false,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-11-06",
+          "day": 6,
+          "in-month?": false,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-11-07",
+          "day": 7,
+          "in-month?": false,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        },
+        {
+          "date": "2026-11-08",
+          "day": 8,
+          "in-month?": false,
+          "duration-min": 0.0,
+          "sets": 0,
+          "planned-items": 0,
+          "plan-complete?": false
+        }
+      ]
+    }
+  },
+  "body-loads": {
+    "pectoralis-major": 3.0,
+    "latissimus-dorsi": 2.0,
+    "triceps-brachii": 1.5,
+    "biceps-brachii": 1.0
+  },
+  "radar-values": {
+    "Chest": 3.0,
+    "Back": 2.0,
+    "Shoulders": 0.0,
+    "Arms": 2.5,
+    "Core": 0.0,
+    "Lower body": 0.0
+  },
+  "daily-energy-values": {
+    "2026-10-10": 0.0,
+    "2026-10-11": 0.0,
+    "2026-10-12": 0.0,
+    "2026-10-13": 0.0,
+    "2026-10-14": 25.725,
+    "2026-10-15": 0.0,
+    "2026-10-16": 51.45
+  }
+}

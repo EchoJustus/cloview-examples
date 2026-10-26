@@ -1,0 +1,92 @@
+# ---------------------------------------------------------------------------
+# Build output and staged sources
+#   target/  bb wpf:sync / wpf:build (target/clr-src, target/clr-host-project, target/clr-host),
+#            the Windows harness, target/flutter-* generated Flutter projects
+target/
+build/
+
+# Verification results (local paths inside; upload the zip, never commit it)
+verify/out/*
+!verify/out/.gitkeep
+verify/cloview-examples-windows-verification-results.zip
+
+# Licence signing keys (cloview.licensing.issue keygen): secrets, never commit
+*.private.edn
+license-keys/
+
+# Compiled binaries anywhere
+*.dll
+*.exe
+*.pdb
+*.snapshot
+*.nupkg
+*.class
+*.jar
+
+# ---------------------------------------------------------------------------
+# JVM / Clojure CLI / tooling
+.cpcache/
+.lsp/.cache/
+.clj-kondo/.cache/
+.portal/
+.calva/output-window/
+.nrepl-port
+.rebel_readline_history
+.shadow-cljs/
+
+# ---------------------------------------------------------------------------
+# ClojureDart / Flutter / Dart (also when an app is initialized in place)
+.clojuredart/
+.dart_tool/
+**/lib/cljd-out/
+**/test/cljd-out/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+.gradle/
+local.properties
+# scaffolding that `clj -M:cljd init` (flutter create) adds inside apps/*/flutter
+apps/*/flutter/android/
+apps/*/flutter/ios/
+apps/*/flutter/linux/
+apps/*/flutter/macos/
+apps/*/flutter/windows/
+apps/*/flutter/web/
+apps/*/flutter/lib/
+apps/*/flutter/pubspec.yaml
+apps/*/flutter/pubspec.lock
+apps/*/flutter/analysis_options.yaml
+apps/*/flutter/.metadata
+apps/*/flutter/test/widget_test.dart
+
+# ---------------------------------------------------------------------------
+# .NET / Visual Studio
+bin/
+obj/
+.vs/
+*.user
+*.suo
+TestResults/
+
+# ---------------------------------------------------------------------------
+# Python (benchmark tools)
+__pycache__/
+*.pyc
+
+# ---------------------------------------------------------------------------
+# Editors and OS temp files
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*~
+*.tmp
+.DS_Store
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/

@@ -1,0 +1,41 @@
+;; cloview-examples — root deps.edn for repo-wide JVM tasks (run from the repo root).
+;;
+;; The apps use cloview-core from a sibling checkout: clone both repositories into the
+;; same folder (…/cloview-core next to …/cloview-examples). Every :local/root that points
+;; into ../cloview-core relies on that layout (README, "Getting started").
+;;
+;;   clj -M:fitness                    ; fitness unit tests (reference + app) + the 37 DOM-001 oracles (JVM)
+;;   clj -M:smoke-fitness-javafx [out] ; off-screen JavaFX smoke of the fitness app
+;;   clj -M:run-fitness-javafx         ; the fitness app window (JavaFX)
+;;   clj -M:static-check               ; calls, arities, portability and ClojureDart coverage of apps/,
+;;                                     ; checked against cloview-core by its own checker
+;;   add :cljfx-git (e.g. -M:smoke-fitness-javafx:cljfx-git) if Clojars cannot serve cljfx 1.10.363
+{:paths []
+ :deps {org.clojure/clojure {:mvn/version "1.12.6"}}
+ :aliases
+ {;; Fitness benchmark: ported reference unit tests + DOM-001 business oracles on the JVM.
+  ;; Writes verify/out/fitness-jvm-{business-results,summary}.json; bb fitness:test then runs
+  ;; benchmarks/fitness-baseline/tools/check_fixtures.py --observed on the envelope.
+  :fitness {:extra-paths ["apps/fitness/shared/test"]
+            :extra-deps {fitness/shared {:local/root "apps/fitness/shared"}}
+            :main-opts ["-m" "fitness.verify"]}
+
+  :smoke-fitness-javafx {:extra-paths ["apps/fitness/javafx/src"]
+                         :extra-deps {cloview/javafx {:local/root "../cloview-core/modules/javafx"}
+                                      cloview/verify {:local/root "../cloview-core/verify"}
+                                      fitness/shared {:local/root "apps/fitness/shared"}}
+                         :main-opts ["-m" "fitness.javafx.smoke"]}
+
+  :run-fitness-javafx {:extra-paths ["apps/fitness/javafx/src"]
+                       :extra-deps {cloview/javafx {:local/root "../cloview-core/modules/javafx"}
+                                    fitness/shared {:local/root "apps/fitness/shared"}}
+                       :main-opts ["-m" "fitness.javafx.main"]}
+
+  ;; cloview-core's static check, run on apps/ (the core's files only feed its index)
+  :static-check {:main-opts ["../cloview-core/verify/static_check.clj"
+                             "--core" "../cloview-core" "--app" "apps"]}
+
+  :cljfx-git {:override-deps
+              {cljfx/cljfx {:git/url "https://github.com/cljfx/cljfx"
+                            :git/tag "1.10.363"
+                            :git/sha "6bee510722fbb12d4f7ac447d413a77894bd7e33"}}}}}

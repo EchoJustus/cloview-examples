@@ -1,0 +1,76 @@
+# The examples' Windows harness (verify/run-windows-checks.ps1) on a GitHub-hosted Windows
+# runner: the fitness app on JavaFX, real WPF and Flutter, and the benchmark's checkers.
+# cloview-core is checked out next to this repository (..\cloview-core). Manual for now
+# (Actions > windows-harness > Run workflow, or `gh workflow run windows-harness.yml`);
+# once green, it can also run on pushes to main.
+name: windows-harness
+
+on:
+  workflow_dispatch:
+    inputs:
+      core_ref:
+        description: 'cloview-core branch, tag or commit to test against'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  harness:
+    name: Windows harness (steps 01-05)
+    runs-on: windows-2025
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: cloview-examples
+
+      - uses: actions/checkout@v7
+        with:
+          repository: echojustus/cloview-core
+          ref: ${{ inputs.core_ref }}
+          path: cloview-core
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: DeLaGuardo/setup-clojure@13.7
+        with:
+          cli: latest
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.47.8'
+          cache: true
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Run the harness
+        shell: powershell
+        working-directory: cloview-examples
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File .\verify\run-windows-checks.ps1
+
+      - name: Summary
+        if: always()
+        shell: bash
+        working-directory: cloview-examples
+        run: python -I ../cloview-core/ops/tools/ci_summary.py verify/out >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: windows-verification-results
+          path: |
+            cloview-examples/verify/out/
+            cloview-examples/verify/cloview-examples-windows-verification-results.zip
+          retention-days: 14

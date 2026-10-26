@@ -1,0 +1,14 @@
+{
+  "synthetic": true,
+  "purpose": "Playback and stable viewport testing; not exercise instruction",
+  "gif": {
+    "path": "media/synthetic-motion.gif",
+    "width": 320,
+    "height": 180,
+    "frames": 32,
+    "frame_duration_ms": 90,
+    "loop_duration_ms": 2880,
+    "loop": "infinite"
+  },
+  "mp4_included": false
+}

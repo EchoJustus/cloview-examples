@@ -1,0 +1,24 @@
+;; Fitness on Flutter (ClojureDart).
+;;
+;; `bb fitness:flutter` (and harness step 04) copy this directory to target/flutter-fitness,
+;; add the shared fitness tests to its test/ folder, rewrite :local/root paths to absolute
+;; ones, run `clj -M:cljd init`, add the Dart packages, then compile and test there.
+;; Manual use in place also works:
+;;   clj -M:cljd init                                     ; once (flutter create)
+;;   flutter pub add http shared_preferences path_provider
+;;   clj -M:cljd flutter -d windows
+;;   clj -M:test:cljd test       ; widget test + DOM-001 oracles on Dart
+;;   clj -M:cljd-diag compile    ; on a compile error: also print the full cause chain
+;; Requires Flutter >= 3.35 (3.47.x recommended).
+{:paths ["src"]
+ :deps {tensegritics/clojuredart {:git/url "https://github.com/tensegritics/ClojureDart.git"
+                                  :git/tag "0.9.20261002"
+                                  :git/sha "247b3c2c5f2af8378e49a8f1271fb4e45e4a6982"}
+        cloview/flutter {:local/root "../../../../cloview-core/modules/flutter"}
+        fitness/shared {:local/root "../shared"}}
+ :aliases {:cljd {:main-opts ["-m" "cljd.build"]}
+           :cljd-diag {:extra-deps {cloview/cljd-diag {:local/root "../../../../cloview-core/verify/cljd"}}
+                       :main-opts ["-m" "cloview.verify.cljd-diag"]}
+           :test {:extra-paths ["test"]}}
+ :cljd/opts {:kind :flutter
+             :main fitness.flutter.main}}

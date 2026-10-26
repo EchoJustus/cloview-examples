@@ -1,0 +1,164 @@
+{
+  "schema_version": "FITNESS_CORE_PACKAGE_CHECK_V1",
+  "checked_on": "2026-10-24",
+  "evidence_level": "PACKAGE_CHECK",
+  "scope": "English reference derivative and benchmark checker only; no candidate framework or GUI host executed.",
+  "core_runtime": "Babashka 1.13.225 on Windows x64",
+  "core_tests": {
+    "command": "bb --classpath 'reference-core/src;reference-core/test' -m clogem.fitness.test-runner",
+    "tests": 37,
+    "assertions": 213,
+    "failures": 0,
+    "errors": 0,
+    "result": "PASS"
+  },
+  "frozen_core_outputs": {
+    "command": "bb --classpath 'reference-core/src' reference-core/runner.clj --check",
+    "cases": 37,
+    "result": "PASS"
+  },
+  "fixture_integrity": {
+    "command": "python tools/check_fixtures.py",
+    "result": "PASS"
+  },
+  "submitted_output_comparator": {
+    "checks": [
+      {
+        "name": "reference-shaped submission for checker self-test only",
+        "expected": "accept",
+        "result": "PASS"
+      },
+      {
+        "name": "missing case",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "extra case",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "duplicate case",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "wrong host",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "missing revision",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "blank revision",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "extra envelope field",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "wrong schema",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "array order changed",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "null changed to zero",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "boolean changed to number",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "integer changed to float",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "numeric changed to boolean",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "numeric mismatch",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "object field missing",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "object field extra",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "date changed",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "duplicate JSON field",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "NaN JSON constant",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "Infinity JSON constant",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "finite-grammar overflow",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "floating tolerance within bound",
+        "expected": "accept",
+        "result": "PASS"
+      }
+    ],
+    "result": "PASS",
+    "caveat": "Positive inputs were copied reference answers solely to self-test the comparator. They are not observations from JVM, Dart or CLR candidate executions."
+  },
+  "source_derivative_provenance": {
+    "files_checked": 7,
+    "hashes_match": true,
+    "only_documented_translation_substitutions": true
+  },
+  "english_text_scan": {
+    "files_checked": 20,
+    "ascii_only": true
+  },
+  "not_verified": [
+    "candidate JVM/cljfx execution",
+    "candidate Flutter/ClojureDart execution",
+    "candidate ClojureCLR execution",
+    "UI controls and events",
+    "native persistence",
+    "media playback",
+    "device health APIs",
+    "cross-device networking"
+  ]
+}

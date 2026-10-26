@@ -1,0 +1,148 @@
+(ns fitness.wpf.main
+  "Fitness on WPF (ClojureCLR). Entry points called by CloViewHost.exe (Program.cs) with
+  --ns fitness.wpf.main:
+
+    start!               normal app
+    run-headless-smoke!  --headless-smoke : off-screen WPF checks -> JSON report, exit code
+    run-tests!           --run-tests      : fitness unit tests + DOM-001 oracles on the CLR
+                                            (same as --ns fitness.verify --run-tests)"
+  (:require [clojure.string :as str]
+            [cloview.wpf.app :as app-clr]
+            [cloview.wpf.dispatch :as dispatch]
+            [cloview.wpf.interop :as wpf]
+            [cloview.core.reconcile :as r]
+            [cloview.core.store :as st]
+            [cloview.verify.report :as report]
+            [fitness.app :as app]
+            [fitness.body :as body]
+            [fitness.wpf.native :as natives]
+            [fitness.demo :as demo]
+            [fitness.derive :as derive]
+            [fitness.native :as native]
+            [fitness.verify :as verify]
+            [fitness.views :as views]))
+
+(import '[System.Windows Window RoutedEventArgs]
+        '[System.Windows.Controls Button TabControl TextBlock]
+        '[System.Windows.Controls.Primitives ButtonBase ToggleButton])
+
+;; ---------------------------------------------------------------------------
+;; App
+
+(defn start!
+  "Called by Program.cs before Application.Run()."
+  [_application]
+  (app/register!)
+  (native/register-renderers! (natives/renderers {:dispatch! #(st/dispatch! app/store %)}))
+  (let [m (app-clr/start! {:store app/store
+                           :view views/root
+                           :title "cloview fitness — WPF"
+                           :width 1280 :height 860
+                           :app-id "fitness"})]
+    (st/dispatch! app/store [:settings/persist true])
+    (st/dispatch! app/store [:doc/load])
+    m))
+
+;; ---------------------------------------------------------------------------
+;; Headless smoke
+
+(defn- by-id [rctx id] (r/handle-by-test-id rctx id))
+
+(defn- click! [rctx id]
+  (let [b (by-id rctx id)]
+    (if (instance? ButtonBase b)
+      (do (.RaiseEvent ^ButtonBase b (RoutedEventArgs. ButtonBase/ClickEvent)) (dispatch/pump!) true)
+      false)))
+
+(defn- text-of [rctx id] (some-> ^TextBlock (by-id rctx id) .Text))
+
+(defn- checks! [rep]
+  (let [events (atom [])
+        store (st/create-store {:db (app/initial-db demo/document "2026-10-25")
+                                :on-event (fn [e _] (swap! events conj e))})
+        _ (st/reg-cofx :fitness/today (fn [cofx] (assoc cofx :today "2026-10-25")))
+        _ (native/register-renderers! (natives/renderers {:dispatch! #(st/dispatch! store %)}))
+        {:keys [window rctx unmount!]} (app-clr/mount! {:store store :view views/root
+                                                        :title "fitness smoke" :width 1280 :height 900
+                                                        :offscreen? true})]
+    (try (.Show ^Window window) (dispatch/pump!)
+         (catch System.Exception e (report/error! rep "show-window" e)))
+    (report/check! rep "shell/five-tabs" 5 (some-> ^TabControl (by-id rctx "fitness-tabs") .Items .Count))
+    (report/check! rep "catalog/count-initial" "4 of 4 exercises" (text-of rctx "catalog-count"))
+    ;; multi-select chips (UI-003): a user toggle raises Checked -> one event
+    (let [^ToggleButton chip (by-id rctx "filter-muscles/triceps-brachii")]
+      (report/check! rep "catalog/chip-is-toggle-button" true (instance? ToggleButton chip))
+      (when chip (.set_IsChecked chip true) (dispatch/pump!)))
+    (report/check! rep "catalog/chip-toggles-filter" #{"triceps-brachii"}
+                   (get-in (st/db store) [:catalog :filters :muscles]))
+    (report/check! rep "catalog/count-filtered" "2 of 4 exercises" (text-of rctx "catalog-count"))
+    (report/check! rep "catalog/clear-all-clicked" true (click! rctx "catalog-clear"))
+    (report/check! rep "catalog/clear-all" "4 of 4 exercises" (text-of rctx "catalog-count"))
+    (report/check! rep "catalog/chip-unchecked-after-clear" false
+                   (some-> ^ToggleButton (by-id rctx "filter-muscles/triceps-brachii") .IsChecked boolean))
+    ;; analytics natives (EXT-003, EXT-005)
+    (st/dispatch! store [:nav/tab :analytics])
+    (dispatch/pump!)
+    (doseq [[id check] [["body-map-canvas" "analytics/body-canvas-mounted"]
+                        ["radar-canvas" "analytics/radar-canvas-mounted"]
+                        ["calorie-canvas" "analytics/calorie-canvas-mounted"]]]
+      (report/check! rep check "Canvas" (wpf/type-name (by-id rctx id))))
+    (let [before @derive/calls
+          c (by-id rctx "body-map-canvas")
+          tap! (some-> c wpf/state deref :tap!)
+          lay (body/layout 440.0 340.0)
+          [x y] (body/to-canvas lay :front [40 51])]
+      (when tap! (tap! x y) (dispatch/pump!))
+      (report/check! rep "body/tap-selects-muscle" "pectoralis-major"
+                     (get-in (st/db store) [:analytics :selected-muscle]))
+      (report/check! rep "body/selection-text" true
+                     (boolean (some-> (text-of rctx "muscle-selection") (str/starts-with? "Pectoralis major"))))
+      (when tap! (tap! 2.0 2.0) (dispatch/pump!))
+      (report/check! rep "body/background-tap-emits-nothing" "pectoralis-major"
+                     (get-in (st/db store) [:analytics :selected-muscle]))
+      (report/check! rep "analytics/selection-recomputes-nothing" before @derive/calls
+                     {:note "ARCH-004: derivations are memoized on db slices, not on the db"}))
+    ;; calendar composite (DOM-009)
+    (st/dispatch! store [:nav/tab :calendar])
+    (dispatch/pump!)
+    (report/check! rep "calendar/cell-is-button" "Button" (wpf/type-name (by-id rctx "calendar/2026-10-12")))
+    (click! rctx "calendar/2026-10-12")
+    (report/check! rep "calendar/select-date" "2026-10-12" (get-in (st/db store) [:calendar :selected]))
+    (click! rctx "calendar/prev")
+    (report/check! rep "calendar/previous-month" "2026-09" (get-in (st/db store) [:calendar :month]))
+    (report/check! rep "events/logical-sequence"
+                   [[:catalog/filter-toggle :muscles "triceps-brachii" true] [:catalog/clear]
+                    [:nav/tab :analytics] [:body/select-muscle "pectoralis-major"]
+                    [:nav/tab :calendar] [:calendar/select-date "2026-10-12"]
+                    [:calendar/change-month "2026-09"]]
+                   @events
+                   {:note "one event per user action; programmatic writes never echo"})
+    (unmount!)
+    (.Close ^Window window)))
+
+(defn run-headless-smoke!
+  "Off-screen WPF smoke of the fitness shell. Writes JSON to `out-path`; returns 0 when
+  every critical check passed."
+  [out-path]
+  (app/register!)
+  (let [started (report/now-ms)
+        rep (report/new-report "fitness-clr-wpf-smoke" "clr/wpf")]
+    (swap! rep assoc :env (report/host-info))
+    (try
+      (checks! rep)
+      (catch System.Exception e
+        (report/error! rep "fitness" e)
+        (println (str e))))
+    (let [final (report/finish rep started (report/now-ms))]
+      (report/write-json! out-path final)
+      (println (str "fitness clr wpf smoke: " (if (:ok final) "OK" "FAILED")
+                    " (" (:checks_passed final) "/" (:checks_total final) " checks) -> " out-path))
+      (if (:ok final) 0 1))))
+
+;; ---------------------------------------------------------------------------
+;; Tests on the CLR
+
+(defn run-tests!
+  "Fitness unit tests + DOM-001 oracles (fitness.verify). Returns the exit code."
+  [out-path]
+  (verify/run-tests! out-path))

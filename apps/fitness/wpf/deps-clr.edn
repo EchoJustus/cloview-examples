@@ -1,0 +1,10 @@
+;; Fitness on WPF (ClojureCLR). The runnable app is CloViewHost.exe
+;; (cloview-core's modules/wpf/host-template) with --ns fitness.wpf.main:
+;;   bb run:fitness:wpf       ; stage + build + run
+;;   bb smoke:fitness:wpf     ; off-screen smoke -> verify/out/fitness-clr-wpf-smoke.json
+;;   bb fitness:test:clr      ; unit tests + DOM-001 oracles on the CLR
+;; This file lets `cljr -Spath` / editors resolve the same source set.
+{:paths ["src"]
+ :deps {cloview/wpf {:local/root "../../../../cloview-core/modules/wpf"}
+        cloview/verify {:local/root "../../../../cloview-core/verify"}
+        fitness/shared {:local/root "../shared"}}}

@@ -1,0 +1,1135 @@
+{
+  "schema_version": "FITNESS_ACCEPTANCE_RESULTS_V1",
+  "baseline_version": "0.3.0",
+  "contract_revision": "2026-10-24",
+  "candidate": {
+    "framework_revision": "",
+    "application_revision": "",
+    "shared_source_manifest": [],
+    "host_overrides": []
+  },
+  "selected_profiles": [
+    "CORE"
+  ],
+  "hosts": [
+    {
+      "id": "jvm",
+      "os": "",
+      "runtime": "",
+      "toolkit": "",
+      "build_command": "",
+      "launch_command": "",
+      "fixture_sha256": "",
+      "notes": "Required host for CORE and FITNESS_NATIVE."
+    },
+    {
+      "id": "dart",
+      "os": "",
+      "runtime": "",
+      "toolkit": "",
+      "build_command": "",
+      "launch_command": "",
+      "fixture_sha256": "",
+      "notes": "Required host for CORE and FITNESS_NATIVE."
+    },
+    {
+      "id": "clr",
+      "os": "",
+      "runtime": "",
+      "toolkit": "",
+      "build_command": "",
+      "launch_command": "",
+      "fixture_sha256": "",
+      "notes": "Required host for CORE and FITNESS_NATIVE."
+    },
+    {
+      "id": "dart-android",
+      "os": "",
+      "runtime": "",
+      "toolkit": "",
+      "build_command": "",
+      "launch_command": "",
+      "fixture_sha256": "",
+      "notes": "Optional Android integration host; not required for desktop CORE or FITNESS_NATIVE."
+    }
+  ],
+  "results": [
+    {
+      "host": "jvm",
+      "case_id": "UI-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "UI-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "UI-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "UI-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "UI-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "UI-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "UI-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "UI-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "UI-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "UI-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "UI-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "UI-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "UI-005",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "UI-005",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "UI-005",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "UI-006",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "UI-006",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "UI-006",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "UI-007",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "UI-007",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "UI-007",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "UI-008",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "UI-008",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "UI-008",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "UI-009",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "UI-009",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "UI-009",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "DOM-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "DOM-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "DOM-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "DOM-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "DOM-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "DOM-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "DOM-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "DOM-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "DOM-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "DOM-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "DOM-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "DOM-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "DOM-005",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "DOM-005",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "DOM-005",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "DOM-006",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "DOM-006",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "DOM-006",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "DOM-007",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "DOM-007",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "DOM-007",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "DOM-008",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "DOM-008",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "DOM-008",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "DOM-009",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "DOM-009",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "DOM-009",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "DOM-010",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "DOM-010",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "DOM-010",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "EFFECT-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "EFFECT-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "EFFECT-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "EFFECT-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "EFFECT-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "EFFECT-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "EFFECT-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "EFFECT-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "EFFECT-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "EFFECT-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "EFFECT-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "EFFECT-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "EFFECT-005",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "EFFECT-005",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "EFFECT-005",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "EFFECT-006",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "EFFECT-006",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "EFFECT-006",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "ARCH-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "ARCH-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "ARCH-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "ARCH-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "ARCH-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "ARCH-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "ARCH-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "ARCH-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "ARCH-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "ARCH-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "ARCH-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "ARCH-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "EXT-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "EXT-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "EXT-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "EXT-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "EXT-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "EXT-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "EXT-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "EXT-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "EXT-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "EXT-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "EXT-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "EXT-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "EXT-005",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "EXT-005",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "EXT-005",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "EXT-006",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "EXT-006",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "EXT-006",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "INT-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "INT-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "INT-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart-android",
+      "case_id": "INT-001",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "INT-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "INT-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "INT-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart-android",
+      "case_id": "INT-002",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "jvm",
+      "case_id": "INT-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart",
+      "case_id": "INT-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "clr",
+      "case_id": "INT-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart-android",
+      "case_id": "INT-003",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart-android",
+      "case_id": "INT-004",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    },
+    {
+      "host": "dart-android",
+      "case_id": "INT-005",
+      "status": "NOT_RUN",
+      "evidence": [],
+      "observed": "",
+      "reason": "Template only; no candidate execution has been performed.",
+      "duration_ms": null
+    }
+  ],
+  "notes": [
+    "CORE alone is a partial milestone. Select CORE and FITNESS_NATIVE for full fitness parity.",
+    "Optional Android cases remain reported but do not block a CORE-only gate.",
+    "All selected-profile applicable cases require PASS; unsupported required cases cannot be waived.",
+    "Record each evidence path relative to this result file and include actual evidence files."
+  ]
+}

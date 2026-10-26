@@ -1,0 +1,47 @@
+{
+  "translation": "English-only derivative; not byte-identical to production. Numeric rules unchanged.",
+  "files": [
+    {
+      "source_relative": "core/src/clogem/fitness/domain.cljc",
+      "source_sha256": "beb640c7cc6c3a028ad837720bebd2f726c342b32ecb1bb2d51c5bb533c8e621",
+      "derivative_relative": "reference-core/src/clogem/fitness/domain.cljc",
+      "derivative_sha256": "b7c688d37f9f04b4d89379733e85107e5fec01e5562ba6fdcb027285aa64d85d"
+    },
+    {
+      "source_relative": "core/src/clogem/fitness/catalog.cljc",
+      "source_sha256": "61da202e068d037b19dd1086d67bc346316ad366bda4fd237d937ea664f1c54b",
+      "derivative_relative": "reference-core/src/clogem/fitness/catalog.cljc",
+      "derivative_sha256": "48fbd06c7889b3581d30157682d2752acd5e922ce3150a3899f6e0459b65bc3c"
+    },
+    {
+      "source_relative": "core/src/clogem/fitness/analytics.cljc",
+      "source_sha256": "9d79f6b64d7aaeb8219d0d605990e3bd12794c62cd73da17e831f41a2bd36b91",
+      "derivative_relative": "reference-core/src/clogem/fitness/analytics.cljc",
+      "derivative_sha256": "24c70c27eab81648254b3e8707a2ae9a7c8b6be9ae4818849f6a17fd1dca837f"
+    },
+    {
+      "source_relative": "core/test/clogem/fitness/domain_test.clj",
+      "source_sha256": "c78b78ea369a51836a5c68e34583357d5ba418a45fcbd182e29093a7664b2fa9",
+      "derivative_relative": "reference-core/test/clogem/fitness/domain_test.clj",
+      "derivative_sha256": "5f63534c79753fd07a885372e3fcb1e012afd54dfb5cf1034a4268bc8b9c762e"
+    },
+    {
+      "source_relative": "core/test/clogem/fitness/catalog_test.clj",
+      "source_sha256": "ff5c1827efbba6a3956d55984a198b4a27521750085f55dd9ccfeae08b49c3d5",
+      "derivative_relative": "reference-core/test/clogem/fitness/catalog_test.clj",
+      "derivative_sha256": "fff9022e4665174cb79eeec5f87d2bf38e0e8148df93f19e781bbec9841b02bc"
+    },
+    {
+      "source_relative": "core/test/clogem/fitness/analytics_test.clj",
+      "source_sha256": "e81be295866233bd14c0b740ea53e0cd0121b81fa814d7700f92b6885a7f7f64",
+      "derivative_relative": "reference-core/test/clogem/fitness/analytics_test.clj",
+      "derivative_sha256": "e81be295866233bd14c0b740ea53e0cd0121b81fa814d7700f92b6885a7f7f64"
+    },
+    {
+      "source_relative": "core/test/clogem/fitness/test_runner.clj",
+      "source_sha256": "9632fc7b74c58d0753eab3e7889f0199874e26c599b5d0942e57d3838d501e67",
+      "derivative_relative": "reference-core/test/clogem/fitness/test_runner.clj",
+      "derivative_sha256": "9632fc7b74c58d0753eab3e7889f0199874e26c599b5d0942e57d3838d501e67"
+    }
+  ]
+}

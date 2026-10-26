@@ -1,0 +1,232 @@
+(ns fitness.wpf.native
+  "WPF renderers for the fitness native views (docs/NATIVE_CONTRACTS.md): a Canvas of WPF
+  shapes per view, rebuilt only when its :props change (the reconciler calls :update only
+  then).
+
+  Input: a left click that did not drag (press and release closer than
+  SystemParameters.MinimumHorizontal/VerticalDragDistance) resolves the muscle with the
+  shared fitness.body/pick and dispatches the event vector found in the latest props
+  under [:events :body/select-muscle], once. The element state also holds :tap!, a
+  (fn [x y]) used by the headless smoke to exercise the same path."
+  (:require [cloview.wpf.interop :as wpf]
+            [fitness.body :as body]))
+
+(import '[System.Windows Point SystemParameters UIElement HorizontalAlignment]
+        '[System.Windows.Controls Canvas TextBlock]
+        '[System.Windows.Input MouseButtonEventHandler]
+        '[System.Windows.Media PointCollection StreamGeometry GeometryGroup EllipseGeometry
+          RectangleGeometry DoubleCollection]
+        '[System.Windows.Shapes Polygon Path Line Ellipse Rectangle])
+
+(defn- children [^Canvas c] (.Children c))
+
+(defn- add! [^Canvas c ^UIElement el] (.Add (children c) el) el)
+
+(defn- place! [^UIElement el x y]
+  (Canvas/SetLeft el (double x))
+  (Canvas/SetTop el (double y))
+  el)
+
+(defn- resize! [^Canvas c {:keys [width height]}]
+  (.set_Width c (double width))
+  (.set_Height c (double height)))
+
+(defn- text! [^Canvas c s x y size hex]
+  ;; centred on (x, y): measure first
+  (let [tb (TextBlock.)]
+    (.set_Text tb (str s))
+    (.set_FontSize tb (double size))
+    (.set_Foreground tb (wpf/brush hex))
+    (.Measure tb (System.Windows.Size. Double/PositiveInfinity Double/PositiveInfinity))
+    (let [sz (.DesiredSize tb)]
+      (place! tb (- x (/ (.Width sz) 2.0)) (- y (/ (.Height sz) 2.0))))
+    (add! c tb)))
+
+(defn- point-collection [pts]
+  (let [pc (PointCollection.)]
+    (doseq [[x y] pts] (.Add pc (Point. (double x) (double y))))
+    pc))
+
+(defn- polygon! [^Canvas c pts fill stroke thickness]
+  (let [p (Polygon.)]
+    (.set_Points p (point-collection pts))
+    (when fill (.set_Fill p (wpf/brush fill)))
+    (when stroke (.set_Stroke p (wpf/brush stroke)) (.set_StrokeThickness p (double thickness)))
+    (add! c p)))
+
+(defn- line! [^Canvas c [x1 y1] [x2 y2] stroke thickness]
+  (let [l (Line.)]
+    (.set_X1 l (double x1)) (.set_Y1 l (double y1)) (.set_X2 l (double x2)) (.set_Y2 l (double y2))
+    (.set_Stroke l (wpf/brush stroke))
+    (.set_StrokeThickness l (double thickness))
+    (add! c l)))
+
+(defn- canvas [w h]
+  (let [c (Canvas.)]
+    (.set_Width c (double w))
+    (.set_Height c (double h))
+    ;; a null background is not hit-testable (clicks on empty areas would be lost);
+    ;; a transparent brush is
+    (.set_Background c (wpf/brush "transparent"))
+    (.set_ClipToBounds c true)
+    c))
+
+;; ---------------------------------------------------------------------------
+;; Body map (2D)
+
+(defn- silhouette-geometry [lay figure commands]
+  (let [pt (fn [x y] (let [[px py] (body/to-canvas lay figure [x y])] (Point. (double px) (double py))))
+        s (:scale lay)
+        group (GeometryGroup.)
+        sg (StreamGeometry.)
+        ctx (.Open sg)]
+    (doseq [[op & args] commands]
+      (case op
+        :M (.BeginFigure ctx (apply pt args) true true)
+        :L (.LineTo ctx (apply pt args) true false)
+        :Q (.QuadraticBezierTo ctx (pt (nth args 0) (nth args 1)) (pt (nth args 2) (nth args 3)) true false)
+        :C (.BezierTo ctx (pt (nth args 0) (nth args 1)) (pt (nth args 2) (nth args 3)) (pt (nth args 4) (nth args 5)) true false)
+        :Z nil
+        :oval (let [[x y w h] args
+                    [px py] (body/to-canvas lay figure [x y])
+                    rx (/ (* w s) 2.0) ry (/ (* h s) 2.0)]
+                (.Add (.Children group) (EllipseGeometry. (Point. (+ px rx) (+ py ry)) rx ry)))
+        :rrect (let [[x y w h r] args
+                     [px py] (body/to-canvas lay figure [x y])]
+                 (.Add (.Children group) (RectangleGeometry. (System.Windows.Rect. (double px) (double py) (double (* w s)) (double (* h s)))
+                                                             (double (* r s)) (double (* r s)))))
+        nil))
+    (.Close ctx)
+    (.Add (.Children group) sg)
+    group))
+
+(defn- paint-body! [^Canvas c props]
+  (.Clear (children c))
+  (let [w (.Width c) h (.Height c)
+        lay (body/layout w h)
+        s (:scale lay)
+        levels (into {} (map (juxt :id :level)) (:regions props))
+        selected (:selected props)
+        {:keys [torso arm leg]} body/silhouette]
+    (doseq [figure [:front :back]
+            part [torso arm (body/mirror-commands arm) leg (body/mirror-commands leg)]]
+      (let [p (Path.)]
+        (.set_Data p (silhouette-geometry lay figure part))
+        (.set_Fill p (wpf/brush (:silhouette body/palette)))
+        (.set_IsHitTestVisible p false)
+        (add! c p)))
+    (doseq [{:keys [id figure points]} body/polygons]
+      (let [sel? (= id selected)
+            poly (polygon! c (map #(body/to-canvas lay figure %) points)
+                           (body/level-color (get levels id))
+                           (if sel? (:selected body/palette) (:outline body/palette))
+                           (* s (if sel? 1.2 0.5)))]
+        (.set_IsHitTestVisible ^UIElement poly false)))
+    (doseq [[figure [x y]] (:captions lay)]
+      (.set_IsHitTestVisible ^UIElement (text! c (get-in props [:labels figure] (name figure)) x y 12 (:muted body/palette)) false))))
+
+(defn- body-canvas [dispatch!]
+  (let [c (canvas 440 340)
+        down (atom nil)
+        tap! (fn [x y]
+               (let [props (:props @(wpf/state c))]
+                 (when-some [id (body/pick (.Width c) (.Height c) [x y])]
+                   (when-some [ev (get-in props [:events :body/select-muscle])]
+                     (dispatch! (conj ev id))))))]
+    (swap! (wpf/state c) assoc :tap! tap!)
+    (.add_MouseLeftButtonDown c (gen-delegate MouseButtonEventHandler [_ e]
+                                  (reset! down (.GetPosition e c))))
+    (.add_MouseLeftButtonUp c (gen-delegate MouseButtonEventHandler [_ e]
+                                ;; no ^Point on the local: ClojureCLR treats every value
+                                ;; type as primitive and rejects hinted struct locals
+                                (let [p (.GetPosition e c)
+                                      d @down]
+                                  (reset! down nil)
+                                  (when (and d
+                                             (< (Math/Abs (- (.X p) (.X ^Point d))) SystemParameters/MinimumHorizontalDragDistance)
+                                             (< (Math/Abs (- (.Y p) (.Y ^Point d))) SystemParameters/MinimumVerticalDragDistance))
+                                    (tap! (.X p) (.Y p))))))
+    c))
+
+(defn- update-body! [^Canvas c props]
+  (swap! (wpf/state c) assoc :props props)
+  (resize! c (:size props))
+  (System.Windows.Automation.AutomationProperties/SetName c (str (:a11y-label props)))
+  (paint-body! c props))
+
+;; ---------------------------------------------------------------------------
+;; Radar
+
+(defn- update-radar! [^Canvas c props]
+  (resize! c (:size props))
+  (System.Windows.Automation.AutomationProperties/SetName c (str (:a11y-label props)))
+  (.Clear (children c))
+  (let [w (.Width c) h (.Height c)
+        axes (:axes props)
+        n (max 3 (count axes))
+        r (max 4.0 (min (* 0.31 w) (* 0.34 h)))
+        cx (/ w 2.0) cy (/ h 2.0)
+        angle (fn [i] (+ (- (/ Math/PI 2)) (/ (* 2 Math/PI i) n)))
+        at (fn [i k] [(+ cx (* k r (Math/Cos (angle i)))) (+ cy (* k r (Math/Sin (angle i))))])
+        pts (fn [k-of] (map-indexed (fn [i a] (at i (k-of a))) axes))]
+    (doseq [k [0.25 0.5 0.75 1.0]] (polygon! c (pts (constantly k)) nil "#D9E1D7" 1.0))
+    (doseq [i (range (count axes))] (line! c [cx cy] (at i 1.0) "#D9E1D7" 1.0))
+    (let [prev (polygon! c (pts :previous-level) nil "#BCCDC5" 1.5)]
+      (.set_StrokeDashArray ^Polygon prev (DoubleCollection. (double-array [4.0 3.0]))))
+    (polygon! c (pts :current-level) "#25867526" "#258675" 2.0)   ; CSS #rrggbbaa: 15 % teal
+    (doseq [[i a] (map-indexed vector axes)]
+      (let [[x y] (at i (:current-level a))
+            e (Ellipse.)]
+        (.set_Width e 6.0) (.set_Height e 6.0) (.set_Fill e (wpf/brush "#258675"))
+        (add! c (place! e (- x 3.0) (- y 3.0))))
+      (let [[x y] (at i 1.34)]
+        (text! c (:label a) (max 35.0 (min (- w 35.0) x)) (max 9.0 (min (- h 9.0) y)) 11 "#243B36")))))
+
+;; ---------------------------------------------------------------------------
+;; Daily calories
+
+(defn- update-calories! [^Canvas c props]
+  (resize! c (:size props))
+  (System.Windows.Automation.AutomationProperties/SetName c (str (:a11y-label props)))
+  (.Clear (children c))
+  (let [w (.Width c) h (.Height c)
+        days (:days props)
+        n (max 1 (count days))
+        bottom (- h 30.0) top 21.0 chart-h (- bottom top)
+        cell (/ (- w 28.0) n)
+        bar-w (min 30.0 (* 0.52 cell))
+        scale (double (:scale-max props 1.0))]
+    (doseq [k (range 5)]
+      (let [y (- bottom (* k (/ chart-h 4)))] (line! c [14.0 y] [(- w 14.0) y] "#D9E1D7" 1.0)))
+    (doseq [[i {:keys [label kcal status value-text date]}] (map-indexed vector days)]
+      (let [x (+ 14.0 (* cell (+ i 0.5)))]
+        (if (= status :unknown)
+          (let [r (Rectangle.)]
+            (.set_Width r bar-w) (.set_Height r 8.0)
+            (.set_Stroke r (wpf/brush "#74817A"))
+            (.set_StrokeDashArray r (DoubleCollection. (double-array [3.0 3.0])))
+            (add! c (place! r (- x (/ bar-w 2)) (- bottom 8.0)))
+            (text! c "?" x (- bottom 19.0) 10 "#243B36"))
+          (let [bh (* chart-h (/ (double (or kcal 0.0)) scale))
+                r (Rectangle.)]
+            (.set_Width r bar-w) (.set_Height r (max 0.0 bh))
+            (.set_RadiusX r 3.0) (.set_RadiusY r 3.0)
+            (.set_Fill r (wpf/brush (if (= date (:highlight props)) "#E98D4F" "#258675")))
+            (add! c (place! r (- x (/ bar-w 2)) (- bottom bh)))
+            (text! c value-text x (- bottom bh 11.0) 10 "#243B36")))
+        (text! c label x (+ bottom 17.0) 10 "#74817A")))))
+
+;; ---------------------------------------------------------------------------
+
+(defn renderers
+  "{kind host-map} for fitness.native/register-renderers!."
+  [{:keys [dispatch!]}]
+  {:fitness/body-canvas {:create (fn [] (body-canvas dispatch!))
+                         :update update-body!
+                         :dispose (fn [_] nil)}
+   :fitness/radar-canvas {:create (fn [] (canvas 300 260))
+                          :update update-radar!
+                          :dispose (fn [_] nil)}
+   :fitness/calorie-canvas {:create (fn [] (canvas 320 200))
+                            :update update-calories!
+                            :dispose (fn [_] nil)}})

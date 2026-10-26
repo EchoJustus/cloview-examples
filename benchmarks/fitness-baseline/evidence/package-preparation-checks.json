@@ -1,0 +1,119 @@
+{
+  "checked_on": "2026-10-24",
+  "evidence_level": "PACKAGE_CHECK",
+  "scope": "Benchmark packaging and report-validator checks only; no candidate framework host was executed.",
+  "report_validator": {
+    "self_checks": 18,
+    "results": [
+      {
+        "name": "unexecuted template is structurally valid only",
+        "expected": "accept",
+        "result": "PASS"
+      },
+      {
+        "name": "unexecuted template cannot pass selected profile gate",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "CORE-only template cannot pass full fitness gate",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "missing host-case result",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "duplicate host-case result",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "missing target host",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "unknown result status",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "PASS without evidence and metadata",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "unsupported without explanation",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "evidence path traversal",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "missing evidence file",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "boolean duration is not a number",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "non-finite duration",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "omitted mandatory CORE profile",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "complete synthetic report exercises pass gate only",
+        "expected": "accept",
+        "result": "PASS"
+      },
+      {
+        "name": "required unsupported capability prevents pass",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "duplicate JSON keys",
+        "expected": "reject",
+        "result": "PASS"
+      },
+      {
+        "name": "non-finite JSON literal",
+        "expected": "reject",
+        "result": "PASS"
+      }
+    ]
+  },
+  "critical_english_review": {
+    "result": "PASS",
+    "scope": "Scope, claim boundaries, startup prompt and numeric/domain rules reviewed; architecture choices remain open."
+  },
+  "visual_review": {
+    "result": "PASS",
+    "scope": "Four English localized component PNGs reviewed; not a shipping English app or JVM/CLR evidence."
+  },
+  "media_metadata": {
+    "result": "PASS",
+    "gif_frames": 32,
+    "canvas": [
+      320,
+      180
+    ],
+    "loop_duration_ms": 2880,
+    "mp4_included": false
+  },
+  "archive_check_note": "The final ZIP is independently reopened and checked against its manifest by the packager. This pre-packaging record does not claim a future host acceptance pass."
+}

@@ -1,0 +1,89 @@
+;; cloview-examples tasks (babashka). Run from the repo root:  bb tasks  — lists them.
+;; They need cloview-core cloned next to this repository (../cloview-core): its task
+;; helpers (verify/bb) are on :paths, and the apps depend on its modules.
+;; Babashka is optional: verify/run-windows-checks.ps1 needs only PowerShell.
+{:paths ["verify/bb" "../cloview-core/verify/bb"]
+ :tasks
+ {:requires ([cloview.examples.tasks :as x])
+
+  static-check
+  {:doc "cloview-core's static check on apps/: calls, arities, portability rules, ClojureDart coverage"
+   :task (clojure "-M:static-check")}
+
+  fitness:check
+  {:doc "Fitness baseline integrity + fixture checks (Python tools in benchmarks/fitness-baseline)"
+   :task (when-not (x/fitness-check!) (System/exit 1))}
+
+  fitness:test
+  {:doc "Fitness reference unit tests + DOM-001 oracles on the JVM, then the official --observed check"
+   :task (do (clojure "-M:fitness" "--out-dir" "verify/out")
+             (when-not (x/fitness-check! "verify/out/fitness-jvm-business-results.json")
+               (System/exit 1)))}
+
+  smoke:fitness:javafx
+  {:doc "Off-screen JavaFX smoke of the fitness app -> verify/out/fitness-jvm-smoke.json"
+   :task (clojure "-M:smoke-fitness-javafx" "verify/out/fitness-jvm-smoke.json")}
+
+  run:fitness:javafx
+  {:doc "Fitness on JavaFX (interactive)"
+   :task (clojure "-M:run-fitness-javafx")}
+
+  wpf:sync
+  {:doc "Stage cloview-core's and the apps' .clj/.cljc/.cljr sources into target/clr-src"
+   :task (x/wpf-sync!)}
+
+  wpf:build
+  {:doc "Build CloViewHost from cloview-core's template, in target/ (net10.0-windows, else net9/net8)"
+   :depends [wpf:sync]
+   :task (x/wpf-build!)}
+
+  fitness:test:clr
+  {:doc "Fitness tests + DOM-001 oracles on ClojureCLR inside CloViewHost (Windows), then the --observed check"
+   :depends [wpf:build]
+   :task (do (x/wpf-run! "--ns" "fitness.verify" "--run-tests" "--out" "verify/out/fitness-clr-summary.json")
+             (when-not (x/fitness-check! "verify/out/fitness-clr-business-results.json")
+               (System/exit 1)))}
+
+  smoke:fitness:wpf
+  {:doc "Off-screen WPF smoke of the fitness app -> verify/out/fitness-clr-wpf-smoke.json"
+   :depends [wpf:build]
+   :task (x/wpf-run! "--ns" "fitness.wpf.main" "--headless-smoke" "--out" "verify/out/fitness-clr-wpf-smoke.json")}
+
+  run:fitness:wpf
+  {:doc "Fitness on WPF (interactive). Extra args go to CloViewHost (e.g. --repl 5555)"
+   :depends [wpf:build]
+   :task (apply x/wpf-run! "--ns" "fitness.wpf.main" *command-line-args*)}
+
+  flutter:check
+  {:doc "Check that Flutter >= 3.35 is on PATH (ClojureDart 0.9.20261002 requirement)"
+   :task (x/check-flutter!)}
+
+  fitness:flutter
+  {:doc "Fitness on Flutter: prepare target/flutter-fitness, run its widget test, the shared tests and DOM-001 on Dart"
+   :task (do (x/flutter-prepare! "fitness")
+             (clojure {:dir "target/flutter-fitness"} "-M:test:cljd" "test")
+             (when-not (x/fitness-check! "verify/out/fitness-dart-business-results.json")
+               (System/exit 1)))}
+
+  run:fitness:flutter
+  {:doc "Fitness on Flutter with hot reload; args go to flutter run (default: -d windows)"
+   :task (do (x/flutter-prepare! "fitness")
+             (apply clojure {:dir "target/flutter-fitness"} "-M:cljd" "flutter"
+                    (or (seq *command-line-args*) ["-d" "windows"])))}
+
+  diag:flutter
+  {:doc "Recompile target/flutter-<app> (default fitness) printing the full cause chain of a compile error"
+   :task (let [n (or (first *command-line-args*) "fitness")]
+           (clojure {:dir (str "target/flutter-" n)} "-M:cljd-diag" "compile"))}
+
+  verify
+  {:doc "Windows: the full verification (verify/run-windows-checks.ps1); options pass through, e.g. bb verify -SkipFlutter"
+   :task (apply shell "powershell" "-NoProfile" "-ExecutionPolicy" "Bypass"
+                "-File" "verify/run-windows-checks.ps1" *command-line-args*)}
+
+  clean
+  {:doc "Remove target/ and verify/out/"
+   :task (do (babashka.fs/delete-tree "target")
+             (babashka.fs/delete-tree "verify/out")
+             (babashka.fs/create-dirs "verify/out")
+             (spit "verify/out/.gitkeep" ""))}}}

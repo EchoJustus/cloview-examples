@@ -1,0 +1,22 @@
+(ns fitness.flutter.main
+  "Fitness on Flutter (ClojureDart).  Run: bb fitness:flutter (prepares target/flutter-fitness),
+  then `clj -M:cljd flutter -d <device>` there."
+  (:require ["package:flutter/material.dart" :as m]
+            [cloview.core.store :as st]
+            [cloview.flutter.app :as flutter]
+            [cloview.flutter.effects :as effects]
+            [fitness.app :as app]
+            [fitness.flutter.native :as natives]
+            [fitness.native :as native]
+            [fitness.views :as views]))
+
+(defn main []
+  ;; plugins (shared_preferences, path_provider) need the binding before runApp; :doc/load
+  ;; below reads the stored document right away
+  (m/WidgetsFlutterBinding.ensureInitialized)
+  (app/register!)
+  (native/register-renderers! (natives/renderers {:dispatch! #(st/dispatch! app/store %)}))
+  (effects/install! {:app-id "fitness"})
+  (st/dispatch! app/store [:settings/persist true])
+  (st/dispatch! app/store [:doc/load])
+  (flutter/start! {:store app/store :view views/root :title "cloview fitness"}))
