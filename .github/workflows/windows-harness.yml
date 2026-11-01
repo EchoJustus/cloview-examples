@@ -3,6 +3,8 @@
 # cloview-core is checked out next to this repository (..\cloview-core). Manual for now
 # (Actions > windows-harness > Run workflow, or `gh workflow run windows-harness.yml`);
 # once green, it can also run on pushes to main.
+# The job passes only when every harness step is "ok": in CI a skipped or partial step
+# fails too (the Verdict step; cloview-core's docs/topics/ci-windows-harness-green.md).
 name: windows-harness
 
 on:
@@ -74,3 +76,11 @@ jobs:
             cloview-examples/verify/out/
             cloview-examples/verify/cloview-examples-windows-verification-results.zip
           retention-days: 14
+
+      # Last, so that the summary and the artifact exist whatever the verdict. The harness
+      # itself exits 0; this step fails the job unless every harness step is "ok".
+      - name: Verdict (in CI only "ok" passes)
+        if: always()
+        shell: bash
+        working-directory: cloview-examples
+        run: python -I ../cloview-core/ops/tools/ci_summary.py --require-ok verify/out | tail -n 1 >> "$GITHUB_STEP_SUMMARY"
