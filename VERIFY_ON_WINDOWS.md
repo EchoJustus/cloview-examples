@@ -116,6 +116,13 @@ cloview-core branch, tag or commit (`-f core_ref=<ref>`; empty means its default
 Results: the job summary, and the `windows-verification-results` artifact (`verify/out/`
 and the zip, kept for 14 days).
 
+The job passes only when every step is `ok`. The harness itself exits 0, so the job's
+last step, Verdict, runs cloview-core's `ops/tools/ci_summary.py --require-ok`: a
+`failed`, `skipped` or `partial` step, an `aborted` run or a missing `00-summary.json`
+fails the job. Run on your PC, the harness keeps reporting skips without failing. The
+option has been on cloview-core's `main` since 50a2565 (2026-10-26): a `core_ref` without
+that commit, such as 09d4afe, fails the Verdict step with the tool's usage text.
+
 ## 6. Visual check (owner)
 
 No smoke or test compares pixels ([`docs/NATIVE_CONTRACTS.md`](docs/NATIVE_CONTRACTS.md),
