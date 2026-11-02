@@ -66,10 +66,8 @@ jobs:
       - name: Static check of apps/ against cloview-core
         run: clojure -M:static-check
 
-      # The fitness app off-screen on JavaFX (Xvfb, software rendering). Experimental until
-      # its first green run on a hosted runner.
+      # The fitness app off-screen on JavaFX (Xvfb, software rendering).
       - name: JavaFX smoke of the fitness app (Xvfb)
-        continue-on-error: true
         run: xvfb-run -a clojure -J-Dprism.order=sw -M:smoke-fitness-javafx verify/out/fitness-jvm-smoke.json
 
       - name: Benchmark checkers
@@ -91,13 +89,11 @@ jobs:
           retention-days: 14
 
   clr:
-    # Experimental until its first green run, like cloview-core's clr job: the fitness tests
-    # and oracles on ClojureCLR through the Clojure.Main tool (the Windows harness runs
-    # them inside the real WPF host).
-    name: Fitness on ClojureCLR (experimental)
+    # The fitness tests and oracles on ClojureCLR through the Clojure.Main tool (the Windows
+    # harness runs them inside the real WPF host).
+    name: Fitness on ClojureCLR
     runs-on: ubuntu-24.04
     timeout-minutes: 20
-    continue-on-error: true
     defaults:
       run:
         working-directory: cloview-examples

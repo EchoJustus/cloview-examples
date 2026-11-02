@@ -1,8 +1,9 @@
 # The examples' Windows harness (verify/run-windows-checks.ps1) on a GitHub-hosted Windows
 # runner: the fitness app on JavaFX, real WPF and Flutter, and the benchmark's checkers.
-# cloview-core is checked out next to this repository (..\cloview-core). Manual for now
-# (Actions > windows-harness > Run workflow, or `gh workflow run windows-harness.yml`);
-# once green, it can also run on pushes to main.
+# cloview-core is checked out next to this repository (..\cloview-core). Started by
+# hand only (Actions > windows-harness > Run workflow, or `gh workflow run
+# windows-harness.yml`): it first ran green on 2026-10-26 and gets no push trigger
+# (decision 103 in cloview-core's docs/STAGE_2_2_DECISIONS.md).
 # The job passes only when every harness step is "ok": in CI a skipped or partial step
 # fails too (the Verdict step; cloview-core's docs/topics/ci-windows-harness-green.md).
 name: windows-harness

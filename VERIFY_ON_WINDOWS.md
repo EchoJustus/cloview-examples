@@ -5,10 +5,12 @@ Flutter/ClojureDart, the Windows Clojure CLI) run from `verify\run-windows-check
 which packs the results into one zip to upload for review. The framework has its own
 harness in cloview-core (see its
 [`VERIFY_ON_WINDOWS.md`](https://github.com/echojustus/cloview-core/blob/main/VERIFY_ON_WINDOWS.md)).
-The last recorded Windows run of these checks (2026-10-25) was made before the repository
-split, as step 07 of the single harness, and passed on all three hosts (cloview-core's
+Before the repository split these checks ran as step 07 of the single harness and passed
+on all three hosts on 2026-10-25 (cloview-core's
 [`WINDOWS_VERIFICATION_REPORT.md`](https://github.com/echojustus/cloview-core/blob/main/docs/WINDOWS_VERIFICATION_REPORT.md)
-§8). This harness runs them as steps 02–05.
+§8). This harness runs them as steps 02–05; on a GitHub-hosted Windows runner, started by
+hand (`.github/workflows/windows-harness.yml`), it first passed all five steps on
+2026-10-26, and again with the Verdict step of section 5 on 2026-11-01.
 
 ## 1. Prerequisites
 
